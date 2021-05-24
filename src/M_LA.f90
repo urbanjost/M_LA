@@ -1064,7 +1064,7 @@ doubleprecision :: bis
 
    s = dabs(br) + dabs(bi)
    if (s .eq. 0.0d0) then
-      call mat_err(27)
+      call la_err(27)
       return
    endif
    ars = ar/s
@@ -1090,7 +1090,7 @@ doubleprecision :: r
    r = mat_pythag(in_real,in_imag)
 
    if (r .eq. 0.0d0) then
-      call mat_err(32) !  Singularity of LOG or ATAN
+      call la_err(32) !  Singularity of LOG or ATAN
    else
       t = datan2(in_imag,in_real)
       if (in_imag.eq.0.0d0 .and. in_real.lt.0.0d0) t = dabs(t)
@@ -1122,10 +1122,29 @@ doubleprecision :: ti
       yr = -(ti/2.0d0)
       yi = tr/2.0d0
    else
-      call mat_err(32) ! Singularity of LOG or ATAN
+      call la_err(32) ! Singularity of LOG or ATAN
    endif
 
 end subroutine mat_watan
+!==================================================================================================================================!
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!==================================================================================================================================!
+subroutine la_err(n)
+
+! ident_3="@(#)M_matrix::la_err(3fp): given error number, write associated error message"
+
+integer,intent(in)   :: n
+character(len=255)   :: msg
+   select case(n)
+    case(27); msg='Division by zero is a NO-NO'
+    case(32); msg='Singularity of LOG or ATAN'
+    case default
+       write(msg,'(a,i0)')'<ERROR>:*la_err* internal error: unknown error code=',n
+   end select
+
+   write(*,*)'<ERROR>:'//msg
+
+end subroutine la_err
 !==================================================================================================================================!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !==================================================================================================================================!
