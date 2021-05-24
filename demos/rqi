@@ -1,3 +1,0 @@
-rho = (x'*A*x)
-x = (A-rho*eye)\x;
-x = x/norm(x)

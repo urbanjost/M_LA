@@ -1,15 +1,12 @@
 'mainpage.txt
 /**
-         @mainpage M_strings Fortran Library
+         @mainpage M_LA Fortran Library
 
          @section Introduction
 
-     M_strings and M_strings_oops - Fortran modules for processing strings
-
-     This package consists of two modules that supplement the
-     Fortran string intrinsics. M_strings.f90 is procedural, and
-     M_strings_oops.f90 is an OOP interface to most of the commonly used
-     functions in M_strings.f90.
+	 A collection of linear algebra routines primarily
+	 for use with M_matrix until M_matrix calls LINPACK
+	 or EISPACK or other libraries directly.
 
          @image html html/images/yarnball.gif
 */'
