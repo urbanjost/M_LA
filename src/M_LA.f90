@@ -3,6 +3,11 @@ use,intrinsic :: iso_fortran_env, only : stderr=>ERROR_UNIT, stdin=>INPUT_UNIT, 
 use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64, real32, real64, real128
 implicit none
 private
+
+!public mat_wlog
+!public mat_wdiv
+!public mat_watan
+
 public :: mat_inverse_hilbert
 public :: mat_magic
 public :: mat_pythag
@@ -16,11 +21,9 @@ public mat_wdotci
 
 public mat_wdotur
 public mat_wcopy
-public mat_wdiv
 public mat_wset
 public mat_wswap
 public mat_wsqrt
-public mat_wlog
 public mat_rswap
 public mat_wrscal
 public mat_wscal
@@ -34,7 +37,6 @@ public mat_wdotui
 public mat_iwamax
 public mat_round
 public mat_wpofa
-public mat_watan
 public mat_rrotg
 public mat_wsign
 
@@ -164,16 +166,16 @@ integer         :: m2
    m1 = (m-1)/2
    if (m1.eq.0) return
    do j = 1, m1
-      call rswap(m,a(1,j),1,a(m+1,j),1)
+      call mat_rswap(m,a(1,j),1,a(m+1,j),1)
    enddo
    m1 = (m+1)/2
    m2 = m1 + m
-   call rswap(1,a(m1,1),1,a(m2,1),1)
-   call rswap(1,a(m1,m1),1,a(m2,m1),1)
+   call mat_rswap(1,a(m1,1),1,a(m2,1),1)
+   call mat_rswap(1,a(m1,m1),1,a(m2,m1),1)
    m1 = n+1-(m-3)/2
    if(m1.gt.n) return
    do j = m1, n
-      call rswap(m,a(1,j),1,a(m+1,j),1)
+      call mat_rswap(m,a(1,j),1,a(m+1,j),1)
    enddo
    return
 !
@@ -217,14 +219,14 @@ integer            :: i, j, k, l
 
       i = mat_iwamax(m-k+1,ar(k,l),ai(k,l),1) + k-1
       if (dabs(ar(i,l))+dabs(ai(i,l)) .le. tol)then
-         call wset(m-k+1,0.0d0,0.0d0,ar(k,l),ai(k,l),1)
+         call mat_wset(m-k+1,0.0d0,0.0d0,ar(k,l),ai(k,l),1)
          l = l+1
          cycle INFINITE
       endif
 
-      call wswap(n-l+1,ar(i,l),ai(i,l),lda,ar(k,l),ai(k,l),lda)
-      call wdiv(1.0d0,0.0d0,ar(k,l),ai(k,l),tr,ti)
-      call wscal(n-l+1,tr,ti,ar(k,l),ai(k,l),lda)
+      call mat_wswap(n-l+1,ar(i,l),ai(i,l),lda,ar(k,l),ai(k,l),lda)
+      call mat_wdiv(1.0d0,0.0d0,ar(k,l),ai(k,l),tr,ti)
+      call mat_wscal(n-l+1,tr,ti,ar(k,l),ai(k,l),lda)
       ar(k,l) = 1.0d0
       ai(k,l) = 0.0d0
       do i = 1, m
@@ -331,41 +333,6 @@ end subroutine mat_wcopy
 !==================================================================================================================================!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !==================================================================================================================================!
-subroutine mat_wdiv(ar,ai,br,bi,cr,ci)
-
-! ident_17="@(#)M_LA::mat_wdiv(3fp): c = a/b"
-
-doubleprecision :: ar
-doubleprecision :: ai
-doubleprecision :: br
-doubleprecision :: bi
-doubleprecision :: cr
-doubleprecision :: ci
-
-doubleprecision :: s
-doubleprecision :: d
-doubleprecision :: ars
-doubleprecision :: ais
-doubleprecision :: brs
-doubleprecision :: bis
-
-   s = dabs(br) + dabs(bi)
-   if (s .eq. 0.0d0) then
-      call mat_err(27)
-      return
-   endif
-   ars = ar/s
-   ais = ai/s
-   brs = br/s
-   bis = bi/s
-   d = brs**2 + bis**2
-   cr = mat_flop((ars*brs + ais*bis)/d)
-   ci = (ais*brs - ars*bis)/d
-   if (ci .ne. 0.0d0) ci = mat_flop(ci)
-end subroutine mat_wdiv
-!==================================================================================================================================!
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
-!==================================================================================================================================!
 subroutine mat_wset(n,xr,xi,yr,yi,incy)
 
 ! ident_18="@(#)M_LA::mat_set(3f):"
@@ -445,29 +412,6 @@ doubleprecision             :: ti
    if (tr .lt. 0.0d0) yr = mat_flop(0.5d0*(ti/yi))
    if (tr .gt. 0.0d0) yi = mat_flop(0.5d0*(ti/yr))
 end subroutine mat_wsqrt
-!==================================================================================================================================!
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
-!==================================================================================================================================!
-subroutine mat_wlog(in_real,in_imag,out_real,out_imag)
-
-! ident_22="@(#)M_LA::mat_wlog(3fp): y = log(x)"
-
-doubleprecision :: in_real, in_imag
-doubleprecision :: out_real, out_imag
-doubleprecision :: t
-doubleprecision :: r
-   r = mat_pythag(in_real,in_imag)
-
-   if (r .eq. 0.0d0) then
-      call mat_err(32) !  Singularity of LOG or ATAN
-   else
-      t = datan2(in_imag,in_real)
-      if (in_imag.eq.0.0d0 .and. in_real.lt.0.0d0) t = dabs(t)
-      out_real = dlog(r)
-      out_imag = t
-   endif
-
-end subroutine mat_wlog
 !==================================================================================================================================!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !==================================================================================================================================!
@@ -1052,33 +996,6 @@ end subroutine mat_wpofa
 !==================================================================================================================================!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !==================================================================================================================================!
-subroutine mat_watan(xr,xi,yr,yi)
-
-! ident_47="@(#)M_LA::mat_watan(3fp): y = atan(x) = (i/2)*log((i+x)/(i-x))"
-
-doubleprecision :: xr
-doubleprecision :: xi
-doubleprecision :: yr
-doubleprecision :: yi
-doubleprecision :: tr
-doubleprecision :: ti
-
-   if (xi .eq. 0.0d0) then
-      yr = datan2(xr,1.0d0)
-      yi = 0.0d0
-   elseif (xr.ne.0.0d0 .or. dabs(xi).ne.1.0d0) then
-      call mat_wdiv(xr,1.0d0+xi,-xr,1.0d0-xi,tr,ti)
-      call mat_wlog(tr,ti,tr,ti)
-      yr = -(ti/2.0d0)
-      yi = tr/2.0d0
-   else
-      call mat_err(32) ! Singularity of LOG or ATAN
-   endif
-
-end subroutine mat_watan
-!==================================================================================================================================!
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
-!==================================================================================================================================!
 subroutine mat_rrotg(da,db,c,s)
 
 ! ident_48="@(#)M_LA::mat_rrotg(3fp): construct Givens plane rotation."
@@ -1266,10 +1183,10 @@ end subroutine matX_waxpy
          ZI(J) = 0.0D0
       enddo
       DO 110 K = 1, N
-         CALL wsign(EKR,EKI,-ZR(K),-ZI(K),EKR,EKI)
+         CALL mat_wsign(EKR,EKI,-ZR(K),-ZI(K),EKR,EKI)
          IF (CABS1(EKR-ZR(K),EKI-ZI(K)) .LE. CABS1(AR(K,K),AI(K,K))) GOTO 40
             S = CABS1(AR(K,K),AI(K,K)) / CABS1(EKR-ZR(K),EKI-ZI(K))
-            CALL wrscal(N,S,ZR,ZI,1)
+            CALL mat_wrscal(N,S,ZR,ZI,1)
             EKR = S*EKR
             EKI = S*EKI
    40    CONTINUE
@@ -1280,8 +1197,8 @@ end subroutine matX_waxpy
          S = CABS1(WKR,WKI)
          SM = CABS1(WKMR,WKMI)
          IF (CABS1(AR(K,K),AI(K,K)) .EQ. 0.0D0) GOTO 50
-            CALL wdiv(WKR,WKI,AR(K,K),-AI(K,K),WKR,WKI)
-            CALL wdiv(WKMR,WKMI,AR(K,K),-AI(K,K),WKMR,WKMI)
+            CALL mat_wdiv(WKR,WKI,AR(K,K),-AI(K,K),WKR,WKI)
+            CALL mat_wdiv(WKMR,WKMI,AR(K,K),-AI(K,K),WKMR,WKMI)
          GOTO 60
    50    CONTINUE
             WKR = 1.0D0
@@ -1292,7 +1209,7 @@ end subroutine matX_waxpy
          KP1 = K + 1
          IF (KP1 .GT. N) GOTO 100
             DO J = KP1, N
-               CALL wmul(WKMR,WKMI,AR(K,J),-AI(K,J),TR,TI)
+               CALL mat_wmul(WKMR,WKMI,AR(K,J),-AI(K,J),TR,TI)
                SM = mat_flop(SM + CABS1(ZR(J)+TR,ZI(J)+TI))
                CALL matX_waxpy(1,WKR,WKI,[AR(K,J)],[-AI(K,J)],1,ZR(J),ZI(J),1)
                S = mat_flop(S + CABS1(ZR(J),ZI(J)))
@@ -1311,7 +1228,7 @@ end subroutine matX_waxpy
          ZI(K) = WKI
   110 CONTINUE
       S = 1.0D0/mat_wasum(N,ZR,ZI,1)
-      CALL wrscal(N,S,ZR,ZI,1)
+      CALL mat_wrscal(N,S,ZR,ZI,1)
 !
 !     SOLVE CTRANS(L)*Y = W
 !
@@ -1323,7 +1240,7 @@ end subroutine matX_waxpy
   120    CONTINUE
          IF (CABS1(ZR(K),ZI(K)) .LE. 1.0D0) GOTO 130
             S = 1.0D0/CABS1(ZR(K),ZI(K))
-            CALL wrscal(N,S,ZR,ZI,1)
+            CALL mat_wrscal(N,S,ZR,ZI,1)
   130    CONTINUE
          L = IPVT(K)
          TR = ZR(L)
@@ -1334,7 +1251,7 @@ end subroutine matX_waxpy
          ZI(K) = TI
       enddo
       S = 1.0D0/mat_wasum(N,ZR,ZI,1)
-      CALL wrscal(N,S,ZR,ZI,1)
+      CALL mat_wrscal(N,S,ZR,ZI,1)
 !
       YNORM = 1.0D0
 !
@@ -1351,11 +1268,11 @@ end subroutine matX_waxpy
          IF (K .LT. N) CALL matX_waxpy(N-K,TR,TI,AR(K+1,K),AI(K+1,K),1,ZR(K+1),ZI(K+1),1)
          IF (CABS1(ZR(K),ZI(K)) .LE. 1.0D0) cycle
             S = 1.0D0/CABS1(ZR(K),ZI(K))
-            CALL wrscal(N,S,ZR,ZI,1)
+            CALL mat_wrscal(N,S,ZR,ZI,1)
             YNORM = S*YNORM
       enddo
       S = 1.0D0/mat_wasum(N,ZR,ZI,1)
-      CALL wrscal(N,S,ZR,ZI,1)
+      CALL mat_wrscal(N,S,ZR,ZI,1)
       YNORM = S*YNORM
 !
 !     SOLVE  U*Z = V
@@ -1364,11 +1281,11 @@ end subroutine matX_waxpy
          K = N + 1 - KB
          IF (CABS1(ZR(K),ZI(K)) .LE. CABS1(AR(K,K),AI(K,K))) GOTO 170
             S = CABS1(AR(K,K),AI(K,K)) / CABS1(ZR(K),ZI(K))
-            CALL wrscal(N,S,ZR,ZI,1)
+            CALL mat_wrscal(N,S,ZR,ZI,1)
             YNORM = S*YNORM
   170    CONTINUE
          IF (CABS1(AR(K,K),AI(K,K)) .EQ. 0.0D0) GOTO 180
-            CALL wdiv(ZR(K),ZI(K),AR(K,K),AI(K,K),ZR(K),ZI(K))
+            CALL mat_wdiv(ZR(K),ZI(K),AR(K,K),AI(K,K),ZR(K),ZI(K))
   180    CONTINUE
          IF (CABS1(AR(K,K),AI(K,K)) .NE. 0.0D0) GOTO 190
             ZR(K) = 1.0D0
@@ -1380,7 +1297,7 @@ end subroutine matX_waxpy
       enddo
 !     MAKE ZNORM = 1.0
       S = 1.0D0/mat_wasum(N,ZR,ZI,1)
-      CALL wrscal(N,S,ZR,ZI,1)
+      CALL mat_wrscal(N,S,ZR,ZI,1)
       YNORM = S*YNORM
 !
       IF (ANORM .NE. 0.0D0) RCOND = YNORM/ANORM
@@ -1435,7 +1352,7 @@ SUBROUTINE ML_WGEFA(AR,AI,LDA,N,IPVT,INFO)
 !
 !     SUBROUTINES AND FUNCTIONS
 !
-!     BLAS WAXPY,WSCAL,mat_iwamax
+!     BLAS WAXPY,mat_wscal,mat_iwamax
 !     FORTRAN DABS
 !
 !     INTERNAL VARIABLES
@@ -1477,8 +1394,8 @@ SUBROUTINE ML_WGEFA(AR,AI,LDA,N,IPVT,INFO)
 !
 !           COMPUTE MULTIPLIERS
 !
-            CALL wdiv(-1.0D0,0.0D0,AR(K,K),AI(K,K),TR,TI)
-            CALL wscal(N-K,TR,TI,AR(K+1,K),AI(K+1,K),1)
+            CALL mat_wdiv(-1.0D0,0.0D0,AR(K,K),AI(K,K),TR,TI)
+            CALL mat_wscal(N-K,TR,TI,AR(K+1,K),AI(K+1,K),1)
 !
 !           ROW ELIMINATION WITH COLUMN INDEXING
 !
@@ -1594,7 +1511,7 @@ INTEGER K,KB,L,NM1
 !
    DO KB = 1, N
       K = N + 1 - KB
-      CALL wdiv(BR(K),BI(K),AR(K,K),AI(K,K),BR(K),BI(K))
+      CALL mat_wdiv(BR(K),BI(K),AR(K,K),AI(K,K),BR(K),BI(K))
       TR = -BR(K)
       TI = -BI(K)
       CALL matX_waxpy(K-1,TR,TI,AR(1,K),AI(1,K),1,BR(1),BI(1),1)
@@ -1608,7 +1525,7 @@ INTEGER K,KB,L,NM1
    DO K = 1, N
       TR = BR(K) - mat_wdotcr(K-1,AR(1,K),AI(1,K),1,BR(1),BI(1),1)
       TI = BI(K) - mat_wdotci(K-1,AR(1,K),AI(1,K),1,BR(1),BI(1),1)
-      CALL wdiv(TR,TI,AR(K,K),-AI(K,K),BR(K),BI(K))
+      CALL mat_wdiv(TR,TI,AR(K,K),-AI(K,K),BR(K),BI(K))
    enddo
 !
 !        NOW SOLVE CTRANS(L)*X = Y
@@ -1688,7 +1605,7 @@ SUBROUTINE ML_WGEDI(ar,ai,LDA,N,ipvt,detr,deti,workr,worki,JOB)
 !
 !     SUBROUTINES AND FUNCTIONS
 !
-!     BLAS WAXPY,WSCAL,WSWAP
+!     BLAS WAXPY,mat_wscal,mat_wswap
 !     FORTRAN DABS,MOD
 !
 !     INTERNAL VARIABLES
@@ -1714,7 +1631,7 @@ SUBROUTINE ML_WGEDI(ar,ai,LDA,N,ipvt,detr,deti,workr,worki,JOB)
               DETR(1) = -DETR(1)
               DETI(1) = -DETI(1)
    10      CONTINUE
-           CALL wmul(AR(I,I),AI(I,I),DETR(1),DETI(1),DETR(1),DETI(1))
+           CALL mat_wmul(AR(I,I),AI(I,I),DETR(1),DETI(1),DETR(1),DETI(1))
 !          ...EXIT
 !       ...EXIT
            IF (CABS1(DETR(1),DETI(1)) .EQ. 0.0D0) GOTO 70
@@ -1740,10 +1657,10 @@ SUBROUTINE ML_WGEDI(ar,ai,LDA,N,ipvt,detr,deti,workr,worki,JOB)
 !
       IF (MOD(JOB,10) .EQ. 0) GOTO 160
          DO K = 1, N
-            CALL wdiv(1.0D0,0.0D0,AR(K,K),AI(K,K),AR(K,K),AI(K,K))
+            CALL mat_wdiv(1.0D0,0.0D0,AR(K,K),AI(K,K),AR(K,K),AI(K,K))
             TR = -AR(K,K)
             TI = -AI(K,K)
-            CALL wscal(K-1,TR,TI,AR(1,K),AI(1,K),1)
+            CALL mat_wscal(K-1,TR,TI,AR(1,K),AI(1,K),1)
             KP1 = K + 1
             IF (N .LT. KP1) cycle
             DO J = KP1, N
@@ -1774,7 +1691,7 @@ SUBROUTINE ML_WGEDI(ar,ai,LDA,N,ipvt,detr,deti,workr,worki,JOB)
               CALL matX_waxpy(N,TR,TI,AR(1,J),AI(1,J),1,AR(1,K),AI(1,K),1)
             enddo
             L = IPVT(K)
-            IF (L .NE. K)CALL wswap(N,AR(1,K),AI(1,K),1,AR(1,L),AI(1,L),1)
+            IF (L .NE. K)CALL mat_wswap(N,AR(1,K),AI(1,K),1,AR(1,L),AI(1,L),1)
          enddo
   150    CONTINUE
   160 CONTINUE
@@ -2548,12 +2465,12 @@ integer :: jj
    if (xr .eq. 0.0d0 .and. xi .eq. 0.0d0) goto 340
    yr = mat_flop((hr(enm1,enm1) - sr)/2.0d0)
    yi = mat_flop((hi(enm1,enm1) - si)/2.0d0)
-   call wsqrt(yr**2-yi**2+xr,2.0d0*yr*yi+xi,zzr,zzi)
+   call mat_wsqrt(yr**2-yi**2+xr,2.0d0*yr*yi+xi,zzr,zzi)
    if (yr*zzr + yi*zzi .ge. 0.0d0) goto 310
    zzr = -zzr
    zzi = -zzi
 310 continue
-   call wdiv(xr,xi,yr+zzr,yi+zzi,zzr,zzi)
+   call mat_wdiv(xr,xi,yr+zzr,yi+zzi,zzr,zzi)
    sr = mat_flop(sr - zzr)
    si = mat_flop(si - zzi)
    goto 340
@@ -2724,7 +2641,7 @@ integer :: jj
          if (yi .ne. norm) goto 760
          yi = 0.0d0
 765      continue
-         call wdiv(zzr,zzi,yr,yi,hr(i,en),hi(i,en))
+         call mat_wdiv(zzr,zzi,yr,yi,hr(i,en),hi(i,en))
          tr = mat_flop(dabs(hr(i,en))) + mat_flop(dabs(hi(i,en)))
          if (tr .eq. 0.0d0) cycle
          if (tr + 1.0d0/tr .gt. tr)cycle
@@ -2876,8 +2793,8 @@ SUBROUTINE ML_WSVDC(xr,xi,LDX,N,P,sr,si,er,ei,ur,ui,LDU,vr,vi,LDV,workr,worki,JO
 !
 !     WSVDC USES THE FOLLOWING FUNCTIONS AND SUBPROGRAMS.
 !
-!     BLAS    matX_waxpy,mat_pythag,mat_wdotcr,mat_wdotci,mat_wscal,WSWAP,
-!             rrotg,mat_wnrm2
+!     BLAS    matX_waxpy,mat_pythag,mat_wdotcr,mat_wdotci,mat_wscal,mat_wswap,
+!             mat_rrotg,mat_wnrm2
 !     FORTRAN DABS,DIMAG,DMAX1
 !     FORTRAN MAX0,MIN0,MOD,DSQRT
 !
@@ -2925,14 +2842,14 @@ SUBROUTINE ML_WSVDC(xr,xi,LDX,N,P,sr,si,er,ei,ur,ui,LDU,vr,vi,LDV,workr,worki,JO
 !           COMPUTE THE TRANSFORMATION FOR THE L-TH COLUMN AND
 !           PLACE THE L-TH DIAGONAL IN S(L).
 !
-            SR(L) = wnrm2(N-L+1,XR(L,L),XI(L,L),1)
+            SR(L) = mat_wnrm2(N-L+1,XR(L,L),XI(L,L),1)
             SI(L) = 0.0D0
             IF (CABS1(SR(L),SI(L)) .EQ. 0.0D0) GOTO 20
                IF (CABS1(XR(L,L),XI(L,L)) .EQ. 0.0D0) GOTO 10
-                  CALL wsign(SR(L),SI(L),XR(L,L),XI(L,L),SR(L),SI(L))
+                  CALL mat_wsign(SR(L),SI(L),XR(L,L),XI(L,L),SR(L),SI(L))
    10          CONTINUE
-               CALL wdiv(1.0D0,0.0D0,SR(L),SI(L),TR,TI)
-               CALL wscal(N-L+1,TR,TI,XR(L,L),XI(L,L),1)
+               CALL mat_wdiv(1.0D0,0.0D0,SR(L),SI(L),TR,TI)
+               CALL mat_wscal(N-L+1,TR,TI,XR(L,L),XI(L,L),1)
                XR(L,L) = mat_flop(1.0D0 + XR(L,L))
    20       CONTINUE
             SR(L) = -SR(L)
@@ -2947,7 +2864,7 @@ SUBROUTINE ML_WSVDC(xr,xi,LDX,N,P,sr,si,er,ei,ur,ui,LDU,vr,vi,LDV,workr,worki,JO
 !
                TR= -mat_wdotcr(N-L+1,XR(L,L),XI(L,L),1,XR(L,J),XI(L,J),1)
                TI= -mat_wdotci(N-L+1,XR(L,L),XI(L,L),1,XR(L,J),XI(L,J),1)
-               CALL wdiv(TR,TI,XR(L,L),XI(L,L),TR,TI)
+               CALL mat_wdiv(TR,TI,XR(L,L),XI(L,L),TR,TI)
                CALL matX_waxpy(N-L+1,TR,TI,XR(L,L),XI(L,L),1,XR(L,J),XI(L,J),1)
    40       CONTINUE
 !
@@ -2973,14 +2890,14 @@ SUBROUTINE ML_WSVDC(xr,xi,LDX,N,P,sr,si,er,ei,ur,ui,LDU,vr,vi,LDV,workr,worki,JO
 !           COMPUTE THE L-TH ROW TRANSFORMATION AND PLACE THE
 !           L-TH SUPER-DIAGONAL IN E(L).
 !
-            ER(L) = wnrm2(P-L,ER(LP1),EI(LP1),1)
+            ER(L) = mat_wnrm2(P-L,ER(LP1),EI(LP1),1)
             EI(L) = 0.0D0
             IF (CABS1(ER(L),EI(L)) .EQ. 0.0D0) GOTO 100
                IF (CABS1(ER(LP1),EI(LP1)) .EQ. 0.0D0) GOTO 90
-                  CALL wsign(ER(L),EI(L),ER(LP1),EI(LP1),ER(L),EI(L))
+                  CALL mat_wsign(ER(L),EI(L),ER(LP1),EI(LP1),ER(L),EI(L))
    90          CONTINUE
-               CALL wdiv(1.0D0,0.0D0,ER(L),EI(L),TR,TI)
-               CALL wscal(P-L,TR,TI,ER(LP1),EI(LP1),1)
+               CALL mat_wdiv(1.0D0,0.0D0,ER(L),EI(L),TR,TI)
+               CALL mat_wscal(P-L,TR,TI,ER(LP1),EI(LP1),1)
                ER(LP1) = mat_flop(1.0D0 + ER(LP1))
   100       CONTINUE
             ER(L) = -ER(L)
@@ -2997,7 +2914,7 @@ SUBROUTINE ML_WSVDC(xr,xi,LDX,N,P,sr,si,er,ei,ur,ui,LDU,vr,vi,LDV,workr,worki,JO
                   CALL matX_waxpy(N-L,ER(J),EI(J),XR(LP1,J),XI(LP1,J),1, WORKR(LP1),WORKI(LP1),1)
                enddo
                DO J = LP1, P
-                  CALL wdiv(-ER(J),-EI(J),ER(LP1),EI(LP1),TR,TI)
+                  CALL mat_wdiv(-ER(J),-EI(J),ER(LP1),EI(LP1),TR,TI)
                   CALL matX_waxpy(N-L,TR,-TI,WORKR(LP1),WORKI(LP1),1, XR(LP1,J),XI(LP1,J),1)
                enddo
   140       CONTINUE
@@ -3057,11 +2974,11 @@ SUBROUTINE ML_WSVDC(xr,xi,LDX,N,P,sr,si,er,ei,ur,ui,LDU,vr,vi,LDV,workr,worki,JO
                DO J = LP1, NCU
                   TR = -mat_wdotcr(N-L+1,UR(L,L),UI(L,L),1,UR(L,J), UI(L,J),1)
                   TI = -mat_wdotci(N-L+1,UR(L,L),UI(L,L),1,UR(L,J), UI(L,J),1)
-                  CALL wdiv(TR,TI,UR(L,L),UI(L,L),TR,TI)
+                  CALL mat_wdiv(TR,TI,UR(L,L),UI(L,L),TR,TI)
                   CALL matX_waxpy(N-L+1,TR,TI,UR(L,L),UI(L,L),1,UR(L,J), UI(L,J),1)
                enddo
   270          CONTINUE
-               CALL wrscal(N-L+1,-1.0D0,UR(L,L),UI(L,L),1)
+               CALL mat_wrscal(N-L+1,-1.0D0,UR(L,L),UI(L,L),1)
                UR(L,L) = mat_flop(1.0D0 + UR(L,L))
                LM1 = L - 1
                IF (LM1 .LT. 1) GOTO 290
@@ -3094,7 +3011,7 @@ SUBROUTINE ML_WSVDC(xr,xi,LDX,N,P,sr,si,er,ei,ur,ui,LDU,vr,vi,LDV,workr,worki,JO
                DO J = LP1, P
                   TR = -mat_wdotcr(P-L,VR(LP1,L),VI(LP1,L),1,VR(LP1,J),VI(LP1,J),1)
                   TI = -mat_wdotci(P-L,VR(LP1,L),VI(LP1,L),1,VR(LP1,J),VI(LP1,J),1)
-                  CALL wdiv(TR,TI,VR(LP1,L),VI(LP1,L),TR,TI)
+                  CALL mat_wdiv(TR,TI,VR(LP1,L),VI(LP1,L),TR,TI)
                   CALL matX_waxpy(P-L,TR,TI,VR(LP1,L),VI(LP1,L),1,VR(LP1,J),VI(LP1,J),1)
                enddo
   370       CONTINUE
@@ -3116,18 +3033,18 @@ SUBROUTINE ML_WSVDC(xr,xi,LDX,N,P,sr,si,er,ei,ur,ui,LDU,vr,vi,LDV,workr,worki,JO
             RI = SI(I)/TR
             SR(I) = TR
             SI(I) = 0.0D0
-            IF (I .LT. M) CALL wdiv(ER(I),EI(I),RR,RI,ER(I),EI(I))
-            IF (WANTU) CALL wscal(N,RR,RI,UR(1,I),UI(1,I),1)
+            IF (I .LT. M) CALL mat_wdiv(ER(I),EI(I),RR,RI,ER(I),EI(I))
+            IF (WANTU) CALL mat_wscal(N,RR,RI,UR(1,I),UI(1,I),1)
   405    CONTINUE
 !     ...EXIT
          IF (I .EQ. M) exit
             TR = mat_pythag(ER(I),EI(I))
             IF (TR .EQ. 0.0D0) GOTO 410
-            CALL wdiv(TR,0.0D0,ER(I),EI(I),RR,RI)
+            CALL mat_wdiv(TR,0.0D0,ER(I),EI(I),RR,RI)
             ER(I) = TR
             EI(I) = 0.0D0
-            CALL wmul(SR(I+1),SI(I+1),RR,RI,SR(I+1),SI(I+1))
-            IF (WANTV) CALL wscal(P,RR,RI,VR(1,I+1),VI(1,I+1),1)
+            CALL mat_wmul(SR(I+1),SI(I+1),RR,RI,SR(I+1),SI(I+1))
+            IF (WANTV) CALL mat_wscal(P,RR,RI,VR(1,I+1),VI(1,I+1),1)
   410    CONTINUE
       enddo
 !
@@ -3222,14 +3139,14 @@ SUBROUTINE ML_WSVDC(xr,xi,LDX,N,P,sr,si,er,ei,ur,ui,LDU,vr,vi,LDV,workr,worki,JO
             DO KK = L, MM1
                K = MM1 - KK + L
                T1 = SR(K)
-               CALL rrotg(T1,F,CS,SN)
+               CALL mat_rrotg(T1,F,CS,SN)
                SR(K) = T1
                IF (K .EQ. L) GOTO 580
                   F = mat_flop(-(SN*ER(K-1)))
                   ER(K-1) = mat_flop(CS*ER(K-1))
   580          CONTINUE
-               IF (WANTV) CALL rrot(P,VR(1,K),1,VR(1,M),1,CS,SN)
-               IF (WANTV) CALL rrot(P,VI(1,K),1,VI(1,M),1,CS,SN)
+               IF (WANTV) CALL mat_rrot(P,VR(1,K),1,VR(1,M),1,CS,SN)
+               IF (WANTV) CALL mat_rrot(P,VI(1,K),1,VI(1,M),1,CS,SN)
             enddo
          GOTO 690
 !
@@ -3240,12 +3157,12 @@ SUBROUTINE ML_WSVDC(xr,xi,LDX,N,P,sr,si,er,ei,ur,ui,LDU,vr,vi,LDV,workr,worki,JO
             ER(L-1) = 0.0D0
             DO K = L, M
                T1 = SR(K)
-               CALL rrotg(T1,F,CS,SN)
+               CALL mat_rrotg(T1,F,CS,SN)
                SR(K) = T1
                F = mat_flop(-(SN*ER(K)))
                ER(K) = mat_flop(CS*ER(K))
-               IF (WANTU) CALL rrot(N,UR(1,K),1,UR(1,L-1),1,CS,SN)
-               IF (WANTU) CALL rrot(N,UI(1,K),1,UI(1,L-1),1,CS,SN)
+               IF (WANTU) CALL mat_rrot(N,UR(1,K),1,UR(1,L-1),1,CS,SN)
+               IF (WANTU) CALL mat_rrot(N,UI(1,K),1,UI(1,L-1),1,CS,SN)
             enddo
          GOTO 690
 !
@@ -3276,22 +3193,22 @@ SUBROUTINE ML_WSVDC(xr,xi,LDX,N,P,sr,si,er,ei,ur,ui,LDU,vr,vi,LDV,workr,worki,JO
 !
             MM1 = M - 1
             DO K = L, MM1
-               CALL rrotg(F,G,CS,SN)
+               CALL mat_rrotg(F,G,CS,SN)
                IF (K .NE. L) ER(K-1) = F
                F = mat_flop(CS*SR(K) + SN*ER(K))
                ER(K) = mat_flop(CS*ER(K) - SN*SR(K))
                G = mat_flop(SN*SR(K+1))
                SR(K+1) = mat_flop(CS*SR(K+1))
-               IF (WANTV) CALL rrot(P,VR(1,K),1,VR(1,K+1),1,CS,SN)
-               IF (WANTV) CALL rrot(P,VI(1,K),1,VI(1,K+1),1,CS,SN)
-               CALL rrotg(F,G,CS,SN)
+               IF (WANTV) CALL mat_rrot(P,VR(1,K),1,VR(1,K+1),1,CS,SN)
+               IF (WANTV) CALL mat_rrot(P,VI(1,K),1,VI(1,K+1),1,CS,SN)
+               CALL mat_rrotg(F,G,CS,SN)
                SR(K) = F
                F = mat_flop(CS*ER(K) + SN*SR(K+1))
                SR(K+1) = mat_flop(-(SN*ER(K)) + CS*SR(K+1))
                G = mat_flop(SN*ER(K+1))
                ER(K+1) = mat_flop(CS*ER(K+1))
-               IF (WANTU .AND. K .LT. N) CALL rrot(N,UR(1,K),1,UR(1,K+1),1,CS,SN)
-               IF (WANTU .AND. K .LT. N) CALL rrot(N,UI(1,K),1,UI(1,K+1),1,CS,SN)
+               IF (WANTU .AND. K .LT. N) CALL mat_rrot(N,UR(1,K),1,UR(1,K+1),1,CS,SN)
+               IF (WANTU .AND. K .LT. N) CALL mat_rrot(N,UI(1,K),1,UI(1,K+1),1,CS,SN)
             enddo
             ER(M-1) = F
             ITER = ITER + 1
@@ -3305,7 +3222,7 @@ SUBROUTINE ML_WSVDC(xr,xi,LDX,N,P,sr,si,er,ei,ur,ui,LDU,vr,vi,LDV,workr,worki,JO
 !
             IF (SR(L) .GE. 0.0D0) GOTO 660
                SR(L) = -SR(L)
-             IF (WANTV) CALL wrscal(P,-1.0D0,VR(1,L),VI(1,L),1)
+             IF (WANTV) CALL mat_wrscal(P,-1.0D0,VR(1,L),VI(1,L),1)
   660       CONTINUE
 !
 !           ORDER THE SINGULAR VALUE.
@@ -3316,8 +3233,8 @@ SUBROUTINE ML_WSVDC(xr,xi,LDX,N,P,sr,si,er,ei,ur,ui,LDU,vr,vi,LDV,workr,worki,JO
                TR = SR(L)
                SR(L) = SR(L+1)
                SR(L+1) = TR
-               IF (WANTV .AND. L .LT. P)CALL wswap(P,VR(1,L),VI(1,L),1,VR(1,L+1),VI(1,L+1),1)
-               IF (WANTU .AND. L .LT. N)CALL wswap(N,UR(1,L),UI(1,L),1,UR(1,L+1),UI(1,L+1),1)
+               IF (WANTV .AND. L .LT. P)CALL mat_wswap(P,VR(1,L),VI(1,L),1,VR(1,L+1),VI(1,L+1),1)
+               IF (WANTU .AND. L .LT. N)CALL mat_wswap(N,UR(1,L),UI(1,L),1,UR(1,L+1),UI(1,L+1),1)
                L = L + 1
             GOTO 670
   680       CONTINUE
@@ -3413,7 +3330,7 @@ SUBROUTINE ML_WQRDC(XR,XI,LDX,N,P,QRAUXR,QRAUXI,JPVT,WORKR,WORKI, JOB)
 !     WQRDC USES THE FOLLOWING FUNCTIONS AND SUBPROGRAMS.
 !
 !     BLAS matX_waxpy,mat_pythag,mat_wdotcr,mat_wdotci,mat_wscal
-!     blas wswap ,mat_wnrm2
+!     blas mat_wswap ,mat_wnrm2
 !     FORTRAN DABS,DIMAG,DMAX1,MIN0
 !
 !     INTERNAL VARIABLES
@@ -3441,7 +3358,7 @@ integer :: jj
             JPVT(J) = J
             IF (NEGJ) JPVT(J) = -J
             IF (.NOT.SWAPJ) GOTO 10
-               IF (J .NE. PL) CALL wswap(N,XR(1,PL),XI(1,PL),1,XR(1,J),XI(1,J),1)
+               IF (J .NE. PL) CALL mat_wswap(N,XR(1,PL),XI(1,PL),1,XR(1,J),XI(1,J),1)
                JPVT(J) = JPVT(PL)
                JPVT(PL) = J
                PL = PL + 1
@@ -3453,7 +3370,7 @@ integer :: jj
             IF (JPVT(J) .GE. 0) GOTO 40
                JPVT(J) = -JPVT(J)
                IF (J .EQ. PU) GOTO 30
-                  CALL wswap(N,XR(1,PU),XI(1,PU),1,XR(1,J),XI(1,J),1)
+                  CALL mat_wswap(N,XR(1,PU),XI(1,PU),1,XR(1,J),XI(1,J),1)
                   JP = JPVT(PU)
                   JPVT(PU) = JPVT(J)
                   JPVT(J) = JP
@@ -3467,7 +3384,7 @@ integer :: jj
 !
       IF (PU .LT. PL) GOTO 80
       DO 70 J = PL, PU
-         QRAUXR(J) = wnrm2(N,XR(1,J),XI(1,J),1)
+         QRAUXR(J) = mat_wnrm2(N,XR(1,J),XI(1,J),1)
          QRAUXI(J) = 0.0D0
          WORKR(J) = QRAUXR(J)
          WORKI(J) = QRAUXI(J)
@@ -3491,7 +3408,7 @@ integer :: jj
                MAXJ = J
             enddo
             IF (MAXJ .EQ. L) GOTO 110
-              CALL wswap(N,XR(1,L),XI(1,L),1,XR(1,MAXJ),XI(1,MAXJ),1)
+              CALL mat_wswap(N,XR(1,L),XI(1,L),1,XR(1,MAXJ),XI(1,MAXJ),1)
               QRAUXR(MAXJ) = QRAUXR(L)
               QRAUXI(MAXJ) = QRAUXI(L)
               WORKR(MAXJ) = WORKR(L)
@@ -3507,14 +3424,14 @@ integer :: jj
 !
 !           COMPUTE THE HOUSEHOLDER TRANSFORMATION FOR COLUMN L.
 !
-            NRMXLR = wnrm2(N-L+1,XR(L,L),XI(L,L),1)
+            NRMXLR = mat_wnrm2(N-L+1,XR(L,L),XI(L,L),1)
             NRMXLI = 0.0D0
             IF (CABS1(NRMXLR,NRMXLI) .EQ. 0.0D0) GOTO 190
               IF (CABS1(XR(L,L),XI(L,L)) .EQ. 0.0D0) GOTO 130
-              CALL wsign(NRMXLR,NRMXLI,XR(L,L),XI(L,L),NRMXLR,NRMXLI)
+              CALL mat_wsign(NRMXLR,NRMXLI,XR(L,L),XI(L,L),NRMXLR,NRMXLI)
   130         CONTINUE
-              CALL wdiv(1.0D0,0.0D0,NRMXLR,NRMXLI,TR,TI)
-              CALL wscal(N-L+1,TR,TI,XR(L,L),XI(L,L),1)
+              CALL mat_wdiv(1.0D0,0.0D0,NRMXLR,NRMXLI,TR,TI)
+              CALL mat_wscal(N-L+1,TR,TI,XR(L,L),XI(L,L),1)
               XR(L,L) = mat_flop(1.0D0 + XR(L,L))
 !
 !             APPLY THE TRANSFORMATION TO THE REMAINING COLUMNS,
@@ -3525,7 +3442,7 @@ integer :: jj
               DO 170 J = LP1, P
                   TR = -mat_wdotcr(N-L+1,XR(L,L),XI(L,L),1,XR(L,J), XI(L,J),1)
                   TI = -mat_wdotci(N-L+1,XR(L,L),XI(L,L),1,XR(L,J), XI(L,J),1)
-                  CALL wdiv(TR,TI,XR(L,L),XI(L,L),TR,TI)
+                  CALL mat_wdiv(TR,TI,XR(L,L),XI(L,L),TR,TI)
                   CALL matX_waxpy(N-L+1,TR,TI,XR(L,L),XI(L,L),1,XR(L,J), XI(L,J),1)
                   IF (J .LT. PL .OR. J .GT. PU) GOTO 160
                   IF (CABS1(QRAUXR(J),QRAUXI(J)) .EQ. 0.0D0) GOTO 160
@@ -3538,7 +3455,7 @@ integer :: jj
                      QRAUXI(J) = QRAUXI(J)*DSQRT(TR)
                      GOTO 150
   140                CONTINUE
-                     QRAUXR(J) = wnrm2(N-L,XR(L+1,J),XI(L+1,J),1)
+                     QRAUXR(J) = mat_wnrm2(N-L,XR(L+1,J),XI(L+1,J),1)
                      QRAUXI(J) = 0.0D0
                      WORKR(J) = QRAUXR(J)
                      WORKI(J) = QRAUXI(J)
@@ -3703,7 +3620,7 @@ DOUBLEPRECISION XR(LDX,*),XI(LDX,*),QRAUXR(*),QRAUXI(*),YR(*),     &
 !
 !     ML_WQRSL USES THE FOLLOWING FUNCTIONS AND SUBPROGRAMS.
 !
-!     BLAS matX_waxpy,WCOPY,mat_wdotcr,mat_wdotci
+!     BLAS matX_waxpy,mat_wcopy,mat_wdotcr,mat_wdotci
 !     FORTRAN DABS,DIMAG,MIN0,MOD
 !
 !     INTERNAL VARIABLES
@@ -3749,7 +3666,7 @@ DOUBLEPRECISION XR(LDX,*),XI(LDX,*),QRAUXR(*),QRAUXI(*),YR(*),     &
    INFO = 1
    GOTO 50
 40 CONTINUE
-   CALL wdiv(YR(1),YI(1),XR(1,1),XI(1,1),BR(1),BI(1))
+   CALL mat_wdiv(YR(1),YI(1),XR(1,1),XI(1,1),BR(1),BI(1))
 50 CONTINUE
 60 CONTINUE
    IF (.NOT.CR) GOTO 70
@@ -3761,8 +3678,8 @@ DOUBLEPRECISION XR(LDX,*),XI(LDX,*),QRAUXR(*),QRAUXI(*),YR(*),     &
 !
 !        SET UP TO COMPUTE QY OR QTY.
 !
-   IF (CQY) CALL wcopy(N,YR,YI,1,QYR,QYI,1)
-   IF (CQTY) CALL wcopy(N,YR,YI,1,QTYR,QTYI,1)
+   IF (CQY) CALL mat_wcopy(N,YR,YI,1,QYR,QYI,1)
+   IF (CQTY) CALL mat_wcopy(N,YR,YI,1,QTYR,QTYI,1)
    IF (.NOT.CQY) GOTO 110
 !
 !           COMPUTE QY.
@@ -3776,7 +3693,7 @@ DOUBLEPRECISION XR(LDX,*),XI(LDX,*),QRAUXR(*),QRAUXI(*),YR(*),     &
       XI(J,J) = QRAUXI(J)
       TR=-mat_wdotcr(N-J+1,XR(J,J),XI(J,J),1,QYR(J),QYI(J),1)
       TI=-mat_wdotci(N-J+1,XR(J,J),XI(J,J),1,QYR(J),QYI(J),1)
-      CALL wdiv(TR,TI,XR(J,J),XI(J,J),TR,TI)
+      CALL mat_wdiv(TR,TI,XR(J,J),XI(J,J),TR,TI)
       CALL matX_waxpy(N-J+1,TR,TI,XR(J,J),XI(J,J),1,QYR(J), QYI(J),1)
       XR(J,J) = TEMPR
       XI(J,J) = TEMPI
@@ -3794,7 +3711,7 @@ DOUBLEPRECISION XR(LDX,*),XI(LDX,*),QRAUXR(*),QRAUXI(*),YR(*),     &
       XI(J,J) = QRAUXI(J)
       TR = -mat_wdotcr(N-J+1,XR(J,J),XI(J,J),1,QTYR(J), QTYI(J),1)
       TI = -mat_wdotci(N-J+1,XR(J,J),XI(J,J),1,QTYR(J), QTYI(J),1)
-      CALL wdiv(TR,TI,XR(J,J),XI(J,J),TR,TI)
+      CALL mat_wdiv(TR,TI,XR(J,J),XI(J,J),TR,TI)
       CALL matX_waxpy(N-J+1,TR,TI,XR(J,J),XI(J,J),1,QTYR(J), QTYI(J),1)
       XR(J,J) = TEMPR
       XI(J,J) = TEMPI
@@ -3803,10 +3720,10 @@ DOUBLEPRECISION XR(LDX,*),XI(LDX,*),QRAUXR(*),QRAUXI(*),YR(*),     &
 !
 !        SET UP TO COMPUTE B, RSD, OR XB.
 !
-   IF (CB) CALL wcopy(K,QTYR,QTYI,1,BR,BI,1)
+   IF (CB) CALL mat_wcopy(K,QTYR,QTYI,1,BR,BI,1)
    KP1 = K + 1
-   IF (CXB) CALL wcopy(K,QTYR,QTYI,1,XBR,XBI,1)
-   IF (CR .AND. K .LT. N)CALL wcopy(N-K,QTYR(KP1),QTYI(KP1),1,RSDR(KP1),RSDI(KP1),1)
+   IF (CXB) CALL mat_wcopy(K,QTYR,QTYI,1,XBR,XBI,1)
+   IF (CR .AND. K .LT. N)CALL mat_wcopy(N-K,QTYR(KP1),QTYI(KP1),1,RSDR(KP1),RSDI(KP1),1)
    IF (.NOT.CXB .OR. KP1 .GT. N) GOTO 160
    DO I = KP1, N
       XBR(I) = 0.0D0
@@ -3831,7 +3748,7 @@ DOUBLEPRECISION XR(LDX,*),XI(LDX,*),QRAUXR(*),QRAUXI(*),YR(*),     &
 !           ......EXIT
       GOTO 220
 190   CONTINUE
-      CALL wdiv(BR(J),BI(J),XR(J,J),XI(J,J),BR(J),BI(J))
+      CALL mat_wdiv(BR(J),BI(J),XR(J,J),XI(J,J),BR(J),BI(J))
       IF (J .EQ. 1) GOTO 200
       TR = -BR(J)
       TI = -BI(J)
@@ -3854,13 +3771,13 @@ DOUBLEPRECISION XR(LDX,*),XI(LDX,*),QRAUXR(*),QRAUXI(*),YR(*),     &
       IF (CR) then
          TR = -mat_wdotcr(N-J+1,XR(J,J),XI(J,J),1,RSDR(J), RSDI(J),1)
          TI = -mat_wdotci(N-J+1,XR(J,J),XI(J,J),1,RSDR(J), RSDI(J),1)
-         CALL wdiv(TR,TI,XR(J,J),XI(J,J),TR,TI)
+         CALL mat_wdiv(TR,TI,XR(J,J),XI(J,J),TR,TI)
          CALL matX_waxpy(N-J+1,TR,TI,XR(J,J),XI(J,J),1,RSDR(J), RSDI(J),1)
       endif
       IF (CXB) then
          TR = -mat_wdotcr(N-J+1,XR(J,J),XI(J,J),1,XBR(J), XBI(J),1)
          TI = -mat_wdotci(N-J+1,XR(J,J),XI(J,J),1,XBR(J), XBI(J),1)
-         CALL wdiv(TR,TI,XR(J,J),XI(J,J),TR,TI)
+         CALL mat_wdiv(TR,TI,XR(J,J),XI(J,J),TR,TI)
          CALL matX_waxpy(N-J+1,TR,TI,XR(J,J),XI(J,J),1,XBR(J), XBI(J),1)
       endif
       XR(J,J) = TEMPR
