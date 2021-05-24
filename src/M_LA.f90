@@ -4,9 +4,9 @@ use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64, real32, real
 implicit none
 private
 
-!public mat_wlog
-!public mat_wdiv
-!public mat_watan
+public mat_wlog
+public mat_wdiv
+public mat_watan
 
 public :: mat_inverse_hilbert
 public :: mat_magic
@@ -1041,6 +1041,91 @@ doubleprecision :: t
    zi = xi
    if (t .ne. 0.0d0) call mat_wmul(yr/t,yi/t,zr,zi,zr,zi)
 end subroutine mat_wsign
+!==================================================================================================================================!
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!==================================================================================================================================!
+subroutine mat_wdiv(ar,ai,br,bi,cr,ci)
+
+! ident_17="@(#)M_LA::mat_wdiv(3fp): c = a/b"
+
+doubleprecision :: ar
+doubleprecision :: ai
+doubleprecision :: br
+doubleprecision :: bi
+doubleprecision :: cr
+doubleprecision :: ci
+
+doubleprecision :: s
+doubleprecision :: d
+doubleprecision :: ars
+doubleprecision :: ais
+doubleprecision :: brs
+doubleprecision :: bis
+
+   s = dabs(br) + dabs(bi)
+   if (s .eq. 0.0d0) then
+      call mat_err(27)
+      return
+   endif
+   ars = ar/s
+   ais = ai/s
+   brs = br/s
+   bis = bi/s
+   d = brs**2 + bis**2
+   cr = mat_flop((ars*brs + ais*bis)/d)
+   ci = (ais*brs - ars*bis)/d
+   if (ci .ne. 0.0d0) ci = mat_flop(ci)
+end subroutine mat_wdiv
+!==================================================================================================================================!
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!==================================================================================================================================!
+subroutine mat_wlog(in_real,in_imag,out_real,out_imag)
+
+! ident_22="@(#)M_LA::mat_wlog(3fp): y = log(x)"
+
+doubleprecision :: in_real, in_imag
+doubleprecision :: out_real, out_imag
+doubleprecision :: t
+doubleprecision :: r
+   r = mat_pythag(in_real,in_imag)
+
+   if (r .eq. 0.0d0) then
+      call mat_err(32) !  Singularity of LOG or ATAN
+   else
+      t = datan2(in_imag,in_real)
+      if (in_imag.eq.0.0d0 .and. in_real.lt.0.0d0) t = dabs(t)
+      out_real = dlog(r)
+      out_imag = t
+   endif
+
+end subroutine mat_wlog
+!==================================================================================================================================!
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!==================================================================================================================================!
+subroutine mat_watan(xr,xi,yr,yi)
+
+! ident_47="@(#)M_LA::mat_watan(3fp): y = atan(x) = (i/2)*log((i+x)/(i-x))"
+
+doubleprecision :: xr
+doubleprecision :: xi
+doubleprecision :: yr
+doubleprecision :: yi
+doubleprecision :: tr
+doubleprecision :: ti
+
+   if (xi .eq. 0.0d0) then
+      yr = datan2(xr,1.0d0)
+      yi = 0.0d0
+   elseif (xr.ne.0.0d0 .or. dabs(xi).ne.1.0d0) then
+      call mat_wdiv(xr,1.0d0+xi,-xr,1.0d0-xi,tr,ti)
+      call mat_wlog(tr,ti,tr,ti)
+      yr = -(ti/2.0d0)
+      yi = tr/2.0d0
+   else
+      call mat_err(32) ! Singularity of LOG or ATAN
+   endif
+
+end subroutine mat_watan
 !==================================================================================================================================!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !==================================================================================================================================!
