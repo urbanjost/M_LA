@@ -1217,40 +1217,161 @@ integer         :: ip1
    enddo
 
 end subroutine mat_inverse_hilbert
+
 !==================================================================================================================================!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !==================================================================================================================================!
-subroutine mat_magic(a,lda,n)
+!>
+!!##NAME
+!!   mat_magic(3f) - [M_LA] create an N x N magic square array, N>2
+!!##SYNOPSIS
+!!
+!!    subroutine mat_magic(a,rows,n)
+!!
+!!       integer         :: rows
+!!       integer         :: n
+!!       doubleprecision :: a(rows,n)
+!!
+!!##DESCRIPTION
+!!    This procedure returns the values to create a magic squares array,
+!!    an n by n matrix in which each integer 1, 2, ..., n*n appears exactly
+!!    once; and all columns, rows, and diagonals sum to the same number.
+!!
+!!##OPTIONS
+!!    A             An array to fill with the magic square values. The
+!!                  smallest dimension should be >= 3. Since a square is
+!!                  required only the first N will be filled,
+!!                  where n=min(rows,columns).
+!!    ROWS          size of a row of A; must be >= N
+!!    N             size of an edge of the magic square. A() must have at
+!!                  least this many columns.
+!!
+!!##PEDIGREE
+!!   Based on an algorithm for magic squares from
+!!
+!!     Mathematical Recreations and Essays, 12th ed.,
+!!     by W. W. Rouse Ball and H. S. M. Coxeter
+!!##EXAMPLE
+!!
+!!   Sample program
+!!
+!!      program demo_mat_magic
+!!      use M_LA, only : mat_magic
+!!      implicit none
+!!      integer,parameter :: isize=10
+!!      doubleprecision   :: arr(isize,isize)
+!!      integer           :: i, j, k
+!!         do k=1,isize
+!!            write(*,'(*(g0,1x))')'K=',k
+!!            call mat_magic(arr,size(arr,dim=1),k)
+!!            do i=1,k
+!!               write(*,'(i2,":",*(i5):)')i,(nint(arr(i,j)),j=1,k),nint(sum(arr(k,:k)))
+!!            enddo
+!!         enddo
+!!      end program demo_mat_magic
+!!
+!!   Results:
+!!
+!!     K= 1
+!!     1:    1    1
+!!     K= 2
+!!     1:    1    3    6
+!!     2:    4    2    6
+!!     K= 3
+!!     1:    8    1    6   15
+!!     2:    3    5    7   15
+!!     3:    4    9    2   15
+!!     K= 4
+!!     1:   16    2    3   13   34
+!!     2:    5   11   10    8   34
+!!     3:    9    7    6   12   34
+!!     4:    4   14   15    1   34
+!!     K= 5
+!!     1:   17   24    1    8   15   65
+!!     2:   23    5    7   14   16   65
+!!     3:    4    6   13   20   22   65
+!!     4:   10   12   19   21    3   65
+!!     5:   11   18   25    2    9   65
+!!     K= 6
+!!     1:   35    1    6   26   19   24  111
+!!     2:    3   32    7   21   23   25  111
+!!     3:   31    9    2   22   27   20  111
+!!     4:    8   28   33   17   10   15  111
+!!     5:   30    5   34   12   14   16  111
+!!     6:    4   36   29   13   18   11  111
+!!     K= 7
+!!     1:   30   39   48    1   10   19   28  175
+!!     2:   38   47    7    9   18   27   29  175
+!!     3:   46    6    8   17   26   35   37  175
+!!     4:    5   14   16   25   34   36   45  175
+!!     5:   13   15   24   33   42   44    4  175
+!!     6:   21   23   32   41   43    3   12  175
+!!     7:   22   31   40   49    2   11   20  175
+!!     K= 8
+!!     1:   64    2    3   61   60    6    7   57  260
+!!     2:    9   55   54   12   13   51   50   16  260
+!!     3:   17   47   46   20   21   43   42   24  260
+!!     4:   40   26   27   37   36   30   31   33  260
+!!     5:   32   34   35   29   28   38   39   25  260
+!!     6:   41   23   22   44   45   19   18   48  260
+!!     7:   49   15   14   52   53   11   10   56  260
+!!     8:    8   58   59    5    4   62   63    1  260
+!!     K= 9
+!!     1:   47   58   69   80    1   12   23   34   45  369
+!!     2:   57   68   79    9   11   22   33   44   46  369
+!!     3:   67   78    8   10   21   32   43   54   56  369
+!!     4:   77    7   18   20   31   42   53   55   66  369
+!!     5:    6   17   19   30   41   52   63   65   76  369
+!!     6:   16   27   29   40   51   62   64   75    5  369
+!!     7:   26   28   39   50   61   72   74    4   15  369
+!!     8:   36   38   49   60   71   73    3   14   25  369
+!!     9:   37   48   59   70   81    2   13   24   35  369
+!!     K= 10
+!!     1:   92   99    1    8   15   67   74   51   58   40  505
+!!     2:   98   80    7   14   16   73   55   57   64   41  505
+!!     3:    4   81   88   20   22   54   56   63   70   47  505
+!!     4:   85   87   19   21    3   60   62   69   71   28  505
+!!     5:   86   93   25    2    9   61   68   75   52   34  505
+!!     6:   17   24   76   83   90   42   49   26   33   65  505
+!!     7:   23    5   82   89   91   48   30   32   39   66  505
+!!     8:   79    6   13   95   97   29   31   38   45   72  505
+!!     9:   10   12   94   96   78   35   37   44   46   53  505
+!!    10:   11   18  100   77   84   36   43   50   27   59  505
+!==================================================================================================================================!
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!==================================================================================================================================!
+subroutine mat_magic(a,rows,n)
 !
 ! ident_2="@(#)M_LA::mat_magic(3fp): Algorithms for magic squares"
 
-!        Algorithms taken from
-!        Mathematical Recreations and Essays, 12th Ed.,
-!        by W. W. Rouse Ball and H. S. M. Coxeter
-!
-integer         :: lda
-integer         :: n
-doubleprecision :: a(lda,n)
+integer,intent(in) :: rows
+integer,intent(in) :: n
+doubleprecision    :: a(rows,n)
 
-doubleprecision :: t
-integer         :: i
-integer         :: j
-integer         :: k
-integer         :: m
-integer         :: mm
-integer         :: i1
-integer         :: im
-integer         :: j1
-integer         :: jm
-integer         :: m1
-integer         :: m2
-!
-   if (mod(n,4) .eq. 0) goto 100
+doubleprecision    :: t
+integer            :: i, j, k, m
+integer            :: i1, j1, m1, m2
+integer            :: im, jm, mm
+
+   if (mod(n,4) .eq. 0)then
+      !
+      !     double even order
+      !
+      k = 1
+      do i = 1, n
+         do j = 1, n
+            a(i,j) = k
+            if (mod(i,4)/2 .eq. mod(j,4)/2) a(i,j) = n*n+1 - k
+            k = k+1
+         enddo
+      enddo
+      return
+   endif
    if (mod(n,2) .eq. 0) m = n/2
    if (mod(n,2) .ne. 0) m = n
-!
-!     odd order or upper corner of even order
-!
+   !
+   !     odd order or upper corner of even order
+   !
    do j = 1,m
       do i = 1,m
          a(i,j) = 0
@@ -1265,17 +1386,18 @@ integer         :: m2
       j1 = j+1
       if(i1.lt.1) i1 = m
       if(j1.gt.m) j1 = 1
-      if(int(a(i1,j1)).eq.0) goto 30
-      i1 = i+1
-      j1 = j
-30    continue
+      if(int(a(i1,j1)).ne.0) then
+         i1 = i+1
+         j1 = j
+      endif
       i = i1
       j = j1
    enddo
    if (mod(n,2) .ne. 0) return
-!
-!     rest of even order
-!
+
+   !
+   !     rest of even order
+   !
    t = dble(m*m)
    do i = 1, m
       do j = 1, m
@@ -1288,6 +1410,7 @@ integer         :: m2
    enddo
    m1 = (m-1)/2
    if (m1.eq.0) return
+
    do j = 1, m1
       call mat_rswap(m,a(1,j),1,a(m+1,j),1)
    enddo
@@ -1297,21 +1420,9 @@ integer         :: m2
    call mat_rswap(1,a(m1,m1),1,a(m2,m1),1)
    m1 = n+1-(m-3)/2
    if(m1.gt.n) return
+
    do j = m1, n
       call mat_rswap(m,a(1,j),1,a(m+1,j),1)
-   enddo
-   return
-!
-!     double even order
-!
-100 continue
-   k = 1
-   do i = 1, n
-      do j = 1, n
-         a(i,j) = k
-         if (mod(i,4)/2 .eq. mod(j,4)/2) a(i,j) = n*n+1 - k
-         k = k+1
-      enddo
    enddo
 end subroutine mat_magic
 !==================================================================================================================================!
