@@ -1046,8 +1046,19 @@ end subroutine elementcopy_int64
 !==================================================================================================================================!
 !>
 !!##NAME
-!!     linspace(3f) - [M_LA] - return a vector of linearly spaced values
+!!     linspace(3f) - [M_LA] return a vector of linearly spaced values
 !!##SYNOPSIS
+!!
+!!    function linspace(x1,x2,n)
+!!
+!!     integer,intent(in)               :: n
+!!     integer(kind=int64),intent(in) :: x1,x2
+!!     integer(kind=int64)            :: linspace
+!!
+!!    Where integer may be real or integer and int64 may be any
+!!    supported kind for the corresponding type.
+!!##USAGE
+!!    Common usage:
 !!
 !!     y = linspace(x1,x2)
 !!     y = linspace(x1,x2,n)
@@ -1060,6 +1071,7 @@ end subroutine elementcopy_int64
 !!    X1,X2     X1 and X2 are the upper and lower bound of the values
 !!              returned. The options can be of type REAL or INTEGER,
 !!              but must be of the same type.
+!!
 !!    N         number of values to return
 !!##RETURNS
 !!    LINSPACE  The returned row vector starts with X1 and ends with X2,
