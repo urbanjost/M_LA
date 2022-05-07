@@ -1,6 +1,7 @@
 program runtest
 use M_LA
 use M_verify
+!use M_msg
 implicit none
    unit_check_command=''
    unit_check_keep_going=.true.
@@ -53,6 +54,7 @@ implicit none
    call test_ml_wqrsl_()
    call test_ml_wsvdc_()
 !! teardown
+   call unit_check_stop()
 contains
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_matx_waxpy_()
