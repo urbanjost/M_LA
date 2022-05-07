@@ -2,6 +2,11 @@
 
 A small collection of routines primarily associated with Linear Algebra.
 
+Currently, the primary application is for use by the
+[M_matrix](https://github.com/urbanjost/M_matrix)
+module. As time permits, all the related modules such as
+[M_blas](https://github.com/urbanjost/M_blas) and this one will be merged
+into a single repository.
 
 Installation requires fpm(1):
 
@@ -22,6 +27,33 @@ the fpm.toml project file.
         M_LA        = { git = "https://github.com/urbanjost/M_LA.git" }
 ```
 
----
-[HISTORY](CHANGELOG.md)
----
+## DOCUMENTATION   ![docs](docs/images/docs.gif)
+
+** **The documentation is nascent**. This is just a skeleton at the moment.
+
+### USER
+
+   There are HTML documents for each subprogram in the style of man-pages:
+
+ - An [index](https://urbanjost.github.io/M_LA/man3.html) to the HTML versions
+   of the man-pages.
+
+ - A single page (that uses javascript) combining all the HTML descriptions of the man-pages
+   for easy searching and printing:
+   [BOOK_M_strings](https://urbanjost.github.io/M_LA/BOOK_M_LA.html).
+
+ - ![man-pages](docs/images/manpages.gif) Literal man-pages for use on GNU/Linux, Unix and CygWin platforms:
+    + [manpages.zip](https://urbanjost.github.io/M_LA/manpages.zip)
+    + [manpages.tgz](https://urbanjost.github.io/M_LA/manpages.tgz)
+ - [CHANGELOG](docs/CHANGELOG.md) provides a history of significant changes
+
+### DEVELOPER (__experimental__)
+
+ - The code was run through [ford(1)](https://politicalphysicist.github.io/ford-fortran-documentation.html)
+   to produce a [developers' document](https://urbanjost.github.io/M_strings/fpm-ford/index.html).
+ - [github action status](docs/STATUS.md)
+
+## DEMO PROGRAMS![demos](docs/images/demo.gif)
+
+Each man-page includes a working example program. These and additional
+examples are included in the example/ directory.
