@@ -40,7 +40,7 @@ the fpm.toml project file.
 
  - A single page (that uses javascript) combining all the HTML descriptions of the man-pages
    for easy searching and printing:
-   [BOOK_M_strings](https://urbanjost.github.io/M_LA/BOOK_M_LA.html).
+   [BOOK_M_LA](https://urbanjost.github.io/M_LA/BOOK_M_LA.html).
 
  - ![man-pages](docs/images/manpages.gif) Literal man-pages for use on GNU/Linux, Unix and CygWin platforms:
     + [manpages.zip](https://urbanjost.github.io/M_LA/manpages.zip)
@@ -50,7 +50,7 @@ the fpm.toml project file.
 ### DEVELOPER (__experimental__)
 
  - The code was run through [ford(1)](https://politicalphysicist.github.io/ford-fortran-documentation.html)
-   to produce a [developers' document](https://urbanjost.github.io/M_strings/fpm-ford/index.html).
+   to produce a [developers' document](https://urbanjost.github.io/M_LA/fpm-ford/index.html).
  - [github action status](docs/STATUS.md)
 
 ## DEMO PROGRAMS![demos](docs/images/demo.gif)
