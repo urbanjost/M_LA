@@ -1052,10 +1052,10 @@ end subroutine elementcopy_int64
 !!    function linspace(x1,x2,n)
 !!
 !!     integer,intent(in)               :: n
-!!     integer(kind=int64),intent(in) :: x1,x2
-!!     integer(kind=int64)            :: linspace
+!!     ${TYPE}(kind=${KIND}),intent(in) :: x1,x2
+!!     ${TYPE}(kind=${KIND})            :: linspace
 !!
-!!    Where integer may be real or integer and int64 may be any
+!!    Where ${TYPE} may be real or integer and ${KIND} may be any
 !!    supported kind for the corresponding type.
 !!##USAGE
 !!    Common usage:
