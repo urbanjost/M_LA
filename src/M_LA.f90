@@ -55,6 +55,7 @@ public mat_wsign
 !public :: ml_wsvdc
 
 public :: linspace
+public :: elementcopy
 
 integer,parameter,private:: sp=kind(1.0),dp=kind(1.0d0)
 
@@ -66,7 +67,947 @@ interface linspace
    & linspace_int64,   linspace_int32,  linspace_int16,  linspace_int8
 end interface linspace
 
+interface elementcopy
+   module procedure  &
+   & elementcopy_real128, elementcopy_real64, elementcopy_real32, &
+   & elementcopy_int64,   elementcopy_int32,  elementcopy_int16,  elementcopy_int8
+end interface elementcopy
+
 contains
+!==================================================================================================================================!
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!==================================================================================================================================!
+!>
+!!##NAME
+!!    elementcopy(3f) - [M_LA] copy elements from IN to OUT regardless
+!!    of rank until hit end of one of them
+!!
+!!##SYNOPSIS
+!!
+!!     Subroutine elementcopy (IN, OUT)
+!!
+!!      ${TYPE} (kind=${KIND}), Intent (In) :: IN(..)
+!!      ${TYPE} (kind=${KIND})              :: OUT(..)
+!!
+!!    Where ${TYPE}(kind=${KIND}) may be
+!!
+!!       o Real(kind=real32)
+!!       o Real(kind=real64)
+!!       o Real(kind=real128)
+!!       o Integer(kind=int8)
+!!       o Integer(kind=int16)
+!!       o Integer(kind=int32)
+!!       o Integer(kind=int64)
+!!
+!!##DESCRIPTION
+!!
+!!    Copy the elements from scalar or array IN to array or scalar OUT
+!!    until either the end of IN or OUT is reached, regardless of rank
+!!    of the arguments.
+!!
+!!##OPTIONS
+!!     IN          input array or scalar
+!!     OUT         output array or scalar
+!!
+!!##EXAMPLES
+!!
+!!   Sample program:
+!!
+!!    program demo_elementcopy
+!!    use m_la, only : elementcopy
+!!    implicit none
+!!    character(len=*),parameter :: g='(*(g0:,","))'
+!!    real :: b, b1(3), b2(2,3), b3(2,2,2)
+!!    real :: c8(8), c6(6), c3(3), c
+!!    integer :: ib, ib1(3), ib2(2,3), ib3(2,2,2)
+!!    integer :: ic8(8), ic6(6), ic3(3), ic
+!!       ! default real
+!!       call elementcopy(100.0,b)
+!!       write(*,g)'b',b
+!!       call elementcopy([1.0,2.0,3.0],b1)
+!!       write(*,g)'b1',b1
+!!       call elementcopy(reshape([1.0,2.0,3.0,4.0,5.0,6.0],[2,3]),b2)
+!!       write(*,g)'b2',b2
+!!       call elementcopy(reshape([1.0,2.0,3.0,4.0,5.0,6.0,7.0,8.0],[2,2,2]),b3)
+!!       write(*,g)'b3',b3
+!!       call elementcopy(b3,c8) ! pack
+!!       write(*,g)'c8',c8
+!!       call elementcopy(b3*10,c3) ! smaller
+!!       write(*,g)'c3',c3
+!!       call elementcopy(pack(b3*111.0,.true.),b) ! to scalar
+!!       write(*,g)'b',b
+!!       c6=-999.0
+!!       call elementcopy(b1*10,c6) ! bigger
+!!       write(*,g)'c6',c6
+!!       call elementcopy(b3(2:,2,2),c) !  to scalar from vector
+!!       write(*,g)'c',c
+!!       call elementcopy(b3(2,1,1),c) !  to scalar from element
+!!       write(*,g)'c',c
+!!       call elementcopy(b3,c) !  to scalar
+!!       write(*,g)'c',c
+!!       ! default integer
+!!       call elementcopy(100,ib)
+!!       write(*,g)'ib',ib
+!!       call elementcopy([1,2,3],ib1)
+!!       write(*,g)'ib1',ib1
+!!       call elementcopy(reshape([1,2,3,4,5,6],[2,3]),ib2)
+!!       write(*,g)'ib2',ib2
+!!       call elementcopy(reshape([1,2,3,4,5,6,7,8],[2,2,2]),ib3)
+!!       write(*,g)'ib3',ib3
+!!       call elementcopy(ib3,ic8) ! pack
+!!       write(*,g)'ic8',ic8
+!!       call elementcopy(ib3*10,ic3) ! smaller
+!!       write(*,g)'ic3',ic3
+!!       call elementcopy(pack(ib3*111,.true.),ib) ! to scalar
+!!       write(*,g)'ib',ib
+!!       ic6=-999
+!!       call elementcopy(ib1*10,ic6) ! bigger
+!!       write(*,g)'ic6',ic6
+!!       call elementcopy(ib3(2:,2,2),ic) !  to scalar from vector
+!!       write(*,g)'ic',ic
+!!       call elementcopy(ib3(2,1,1),ic) !  to scalar from element
+!!       write(*,g)'ic',ic
+!!       call elementcopy(ib3,ic) !  to scalar
+!!       write(*,g)'ic',ic
+!!       !
+!!       tesseract: block
+!!       integer :: box(2,3,4,5)
+!!       integer :: i
+!!          call elementcopy([(i,i=1,size(box))],box)
+!!          write(*,g)'box',box
+!!       endblock tesseract
+!!    end program demo_elementcopy
+!!
+!!##AUTHOR
+!!    John S. Urban, 2022.05.07
+!!##LICENSE
+!!    CC0-1.0
+subroutine elementcopy_real32(a1,a2) ! using assumed rank
+real(kind=real32),intent(in) :: a1(..)
+real(kind=real32)            :: a2(..)
+real(kind=real32)            :: one(1), two(1)
+   SELECT RANK(a1)
+   RANK(0)
+      one=a1
+      SELECT RANK(a2)
+      RANK(0); call step2(one,1)
+      RANK(1); call step2(one,1)
+      RANK(2); call step2(one,1)
+      RANK(3); call step2(one,1)
+      RANK(4); call step2(one,1)
+      RANK(5); call step2(one,1)
+      RANK(6); call step2(one,1)
+      RANK(7); call step2(one,1)
+      RANK(8); call step2(one,1)
+      RANK(9); call step2(one,1)
+      RANK(10); call step2(one,1)
+      RANK(11); call step2(one,1)
+      RANK(12); call step2(one,1)
+      RANK(13); call step2(one,1)
+      RANK(14); call step2(one,1)
+      RANK(15); call step2(one,1)
+      END SELECT
+   RANK(1)
+      SELECT RANK(a2)
+      RANK(0); call step2(a1,size(a1))
+      RANK(1); call step2(a1,size(a1))
+      RANK(2); call step2(a1,size(a1))
+      RANK(3); call step2(a1,size(a1))
+      RANK(4); call step2(a1,size(a1))
+      RANK(5); call step2(a1,size(a1))
+      RANK(6); call step2(a1,size(a1))
+      RANK(7); call step2(a1,size(a1))
+      RANK(8); call step2(a1,size(a1))
+      RANK(9); call step2(a1,size(a1))
+      RANK(10); call step2(a1,size(a1))
+      RANK(11); call step2(a1,size(a1))
+      RANK(12); call step2(a1,size(a1))
+      RANK(13); call step2(a1,size(a1))
+      RANK(14); call step2(a1,size(a1))
+      RANK(15); call step2(a1,size(a1))
+      END SELECT
+   RANK(2)
+      SELECT RANK(a2)
+      RANK(0); call step2(a1,size(a1))
+      RANK(1); call step2(a1,size(a1))
+      RANK(2); call step2(a1,size(a1))
+      RANK(3); call step2(a1,size(a1))
+      RANK(4); call step2(a1,size(a1))
+      RANK(5); call step2(a1,size(a1))
+      RANK(6); call step2(a1,size(a1))
+      RANK(7); call step2(a1,size(a1))
+      RANK(8); call step2(a1,size(a1))
+      RANK(9); call step2(a1,size(a1))
+      RANK(10); call step2(a1,size(a1))
+      RANK(11); call step2(a1,size(a1))
+      RANK(12); call step2(a1,size(a1))
+      RANK(13); call step2(a1,size(a1))
+      RANK(14); call step2(a1,size(a1))
+      RANK(15); call step2(a1,size(a1))
+      END SELECT
+   RANK(3)
+      SELECT RANK(a2)
+      RANK(0); call step2(a1,size(a1))
+      RANK(1); call step2(a1,size(a1))
+      RANK(2); call step2(a1,size(a1))
+      RANK(3); call step2(a1,size(a1))
+      RANK(4); call step2(a1,size(a1))
+      RANK(5); call step2(a1,size(a1))
+      RANK(6); call step2(a1,size(a1))
+      RANK(7); call step2(a1,size(a1))
+      RANK(8); call step2(a1,size(a1))
+      RANK(9); call step2(a1,size(a1))
+      RANK(10); call step2(a1,size(a1))
+      RANK(11); call step2(a1,size(a1))
+      RANK(12); call step2(a1,size(a1))
+      RANK(13); call step2(a1,size(a1))
+      RANK(14); call step2(a1,size(a1))
+      RANK(15); call step2(a1,size(a1))
+      END SELECT
+   END SELECT
+contains
+subroutine step2(a3,isz)
+integer :: isz
+real(kind=real32),intent(in) :: a3(isz)
+   SELECT RANK(a2)
+   RANK(0); call ecopy(a3,1,two,1);a2=two(1)
+   RANK(1); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(2); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(3); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(4); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(5); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(6); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(7); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(8); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(9); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(10); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(11); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(12); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(13); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(14); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(15); call ecopy(a3,size(a3),a2,size(a2))
+   END SELECT
+end subroutine step2
+
+subroutine ecopy(a1,n,a2,m)
+integer,intent(in) :: n,m
+real(kind=real32),intent(in) :: a1(n) ! dimensioned with n, there is no rank/shape check
+real(kind=real32)            :: a2(m) ! dimensioned with m, there is no rank/shape check
+integer :: ismall
+   ismall=min(n,m)       ! should warn as well
+   a2(:ismall)=a1(:ismall)
+end subroutine ecopy
+
+end subroutine elementcopy_real32
+
+subroutine elementcopy_real64(a1,a2) ! using assumed rank
+real(kind=real64),intent(in) :: a1(..)
+real(kind=real64)            :: a2(..)
+real(kind=real64)            :: one(1), two(1)
+   SELECT RANK(a1)
+   RANK(0)
+      one=a1
+      SELECT RANK(a2)
+      RANK(0); call step2(one,1)
+      RANK(1); call step2(one,1)
+      RANK(2); call step2(one,1)
+      RANK(3); call step2(one,1)
+      RANK(4); call step2(one,1)
+      RANK(5); call step2(one,1)
+      RANK(6); call step2(one,1)
+      RANK(7); call step2(one,1)
+      RANK(8); call step2(one,1)
+      RANK(9); call step2(one,1)
+      RANK(10); call step2(one,1)
+      RANK(11); call step2(one,1)
+      RANK(12); call step2(one,1)
+      RANK(13); call step2(one,1)
+      RANK(14); call step2(one,1)
+      RANK(15); call step2(one,1)
+      END SELECT
+   RANK(1)
+      SELECT RANK(a2)
+      RANK(0); call step2(a1,size(a1))
+      RANK(1); call step2(a1,size(a1))
+      RANK(2); call step2(a1,size(a1))
+      RANK(3); call step2(a1,size(a1))
+      RANK(4); call step2(a1,size(a1))
+      RANK(5); call step2(a1,size(a1))
+      RANK(6); call step2(a1,size(a1))
+      RANK(7); call step2(a1,size(a1))
+      RANK(8); call step2(a1,size(a1))
+      RANK(9); call step2(a1,size(a1))
+      RANK(10); call step2(a1,size(a1))
+      RANK(11); call step2(a1,size(a1))
+      RANK(12); call step2(a1,size(a1))
+      RANK(13); call step2(a1,size(a1))
+      RANK(14); call step2(a1,size(a1))
+      RANK(15); call step2(a1,size(a1))
+      END SELECT
+   RANK(2)
+      SELECT RANK(a2)
+      RANK(0); call step2(a1,size(a1))
+      RANK(1); call step2(a1,size(a1))
+      RANK(2); call step2(a1,size(a1))
+      RANK(3); call step2(a1,size(a1))
+      RANK(4); call step2(a1,size(a1))
+      RANK(5); call step2(a1,size(a1))
+      RANK(6); call step2(a1,size(a1))
+      RANK(7); call step2(a1,size(a1))
+      RANK(8); call step2(a1,size(a1))
+      RANK(9); call step2(a1,size(a1))
+      RANK(10); call step2(a1,size(a1))
+      RANK(11); call step2(a1,size(a1))
+      RANK(12); call step2(a1,size(a1))
+      RANK(13); call step2(a1,size(a1))
+      RANK(14); call step2(a1,size(a1))
+      RANK(15); call step2(a1,size(a1))
+      END SELECT
+   RANK(3)
+      SELECT RANK(a2)
+      RANK(0); call step2(a1,size(a1))
+      RANK(1); call step2(a1,size(a1))
+      RANK(2); call step2(a1,size(a1))
+      RANK(3); call step2(a1,size(a1))
+      RANK(4); call step2(a1,size(a1))
+      RANK(5); call step2(a1,size(a1))
+      RANK(6); call step2(a1,size(a1))
+      RANK(7); call step2(a1,size(a1))
+      RANK(8); call step2(a1,size(a1))
+      RANK(9); call step2(a1,size(a1))
+      RANK(10); call step2(a1,size(a1))
+      RANK(11); call step2(a1,size(a1))
+      RANK(12); call step2(a1,size(a1))
+      RANK(13); call step2(a1,size(a1))
+      RANK(14); call step2(a1,size(a1))
+      RANK(15); call step2(a1,size(a1))
+      END SELECT
+   END SELECT
+contains
+subroutine step2(a3,isz)
+integer :: isz
+real(kind=real64),intent(in) :: a3(isz)
+   SELECT RANK(a2)
+   RANK(0); call ecopy(a3,1,two,1);a2=two(1)
+   RANK(1); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(2); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(3); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(4); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(5); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(6); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(7); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(8); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(9); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(10); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(11); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(12); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(13); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(14); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(15); call ecopy(a3,size(a3),a2,size(a2))
+   END SELECT
+end subroutine step2
+
+subroutine ecopy(a1,n,a2,m)
+integer,intent(in) :: n,m
+real(kind=real64),intent(in) :: a1(n) ! dimensioned with n, there is no rank/shape check
+real(kind=real64)            :: a2(m) ! dimensioned with m, there is no rank/shape check
+integer :: ismall
+   ismall=min(n,m)       ! should warn as well
+   a2(:ismall)=a1(:ismall)
+end subroutine ecopy
+
+end subroutine elementcopy_real64
+
+subroutine elementcopy_real128(a1,a2) ! using assumed rank
+real(kind=real128),intent(in) :: a1(..)
+real(kind=real128)            :: a2(..)
+real(kind=real128)            :: one(1), two(1)
+   SELECT RANK(a1)
+   RANK(0)
+      one=a1
+      SELECT RANK(a2)
+      RANK(0); call step2(one,1)
+      RANK(1); call step2(one,1)
+      RANK(2); call step2(one,1)
+      RANK(3); call step2(one,1)
+      RANK(4); call step2(one,1)
+      RANK(5); call step2(one,1)
+      RANK(6); call step2(one,1)
+      RANK(7); call step2(one,1)
+      RANK(8); call step2(one,1)
+      RANK(9); call step2(one,1)
+      RANK(10); call step2(one,1)
+      RANK(11); call step2(one,1)
+      RANK(12); call step2(one,1)
+      RANK(13); call step2(one,1)
+      RANK(14); call step2(one,1)
+      RANK(15); call step2(one,1)
+      END SELECT
+   RANK(1)
+      SELECT RANK(a2)
+      RANK(0); call step2(a1,size(a1))
+      RANK(1); call step2(a1,size(a1))
+      RANK(2); call step2(a1,size(a1))
+      RANK(3); call step2(a1,size(a1))
+      RANK(4); call step2(a1,size(a1))
+      RANK(5); call step2(a1,size(a1))
+      RANK(6); call step2(a1,size(a1))
+      RANK(7); call step2(a1,size(a1))
+      RANK(8); call step2(a1,size(a1))
+      RANK(9); call step2(a1,size(a1))
+      RANK(10); call step2(a1,size(a1))
+      RANK(11); call step2(a1,size(a1))
+      RANK(12); call step2(a1,size(a1))
+      RANK(13); call step2(a1,size(a1))
+      RANK(14); call step2(a1,size(a1))
+      RANK(15); call step2(a1,size(a1))
+      END SELECT
+   RANK(2)
+      SELECT RANK(a2)
+      RANK(0); call step2(a1,size(a1))
+      RANK(1); call step2(a1,size(a1))
+      RANK(2); call step2(a1,size(a1))
+      RANK(3); call step2(a1,size(a1))
+      RANK(4); call step2(a1,size(a1))
+      RANK(5); call step2(a1,size(a1))
+      RANK(6); call step2(a1,size(a1))
+      RANK(7); call step2(a1,size(a1))
+      RANK(8); call step2(a1,size(a1))
+      RANK(9); call step2(a1,size(a1))
+      RANK(10); call step2(a1,size(a1))
+      RANK(11); call step2(a1,size(a1))
+      RANK(12); call step2(a1,size(a1))
+      RANK(13); call step2(a1,size(a1))
+      RANK(14); call step2(a1,size(a1))
+      RANK(15); call step2(a1,size(a1))
+      END SELECT
+   RANK(3)
+      SELECT RANK(a2)
+      RANK(0); call step2(a1,size(a1))
+      RANK(1); call step2(a1,size(a1))
+      RANK(2); call step2(a1,size(a1))
+      RANK(3); call step2(a1,size(a1))
+      RANK(4); call step2(a1,size(a1))
+      RANK(5); call step2(a1,size(a1))
+      RANK(6); call step2(a1,size(a1))
+      RANK(7); call step2(a1,size(a1))
+      RANK(8); call step2(a1,size(a1))
+      RANK(9); call step2(a1,size(a1))
+      RANK(10); call step2(a1,size(a1))
+      RANK(11); call step2(a1,size(a1))
+      RANK(12); call step2(a1,size(a1))
+      RANK(13); call step2(a1,size(a1))
+      RANK(14); call step2(a1,size(a1))
+      RANK(15); call step2(a1,size(a1))
+      END SELECT
+   END SELECT
+contains
+subroutine step2(a3,isz)
+integer :: isz
+real(kind=real128),intent(in) :: a3(isz)
+   SELECT RANK(a2)
+   RANK(0); call ecopy(a3,1,two,1);a2=two(1)
+   RANK(1); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(2); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(3); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(4); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(5); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(6); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(7); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(8); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(9); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(10); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(11); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(12); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(13); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(14); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(15); call ecopy(a3,size(a3),a2,size(a2))
+   END SELECT
+end subroutine step2
+
+subroutine ecopy(a1,n,a2,m)
+integer,intent(in) :: n,m
+real(kind=real128),intent(in) :: a1(n) ! dimensioned with n, there is no rank/shape check
+real(kind=real128)            :: a2(m) ! dimensioned with m, there is no rank/shape check
+integer :: ismall
+   ismall=min(n,m)       ! should warn as well
+   a2(:ismall)=a1(:ismall)
+end subroutine ecopy
+
+end subroutine elementcopy_real128
+
+subroutine elementcopy_int8(a1,a2) ! using assumed rank
+integer(kind=int8),intent(in) :: a1(..)
+integer(kind=int8)            :: a2(..)
+integer(kind=int8)            :: one(1), two(1)
+   SELECT RANK(a1)
+   RANK(0)
+      one=a1
+      SELECT RANK(a2)
+      RANK(0); call step2(one,1)
+      RANK(1); call step2(one,1)
+      RANK(2); call step2(one,1)
+      RANK(3); call step2(one,1)
+      RANK(4); call step2(one,1)
+      RANK(5); call step2(one,1)
+      RANK(6); call step2(one,1)
+      RANK(7); call step2(one,1)
+      RANK(8); call step2(one,1)
+      RANK(9); call step2(one,1)
+      RANK(10); call step2(one,1)
+      RANK(11); call step2(one,1)
+      RANK(12); call step2(one,1)
+      RANK(13); call step2(one,1)
+      RANK(14); call step2(one,1)
+      RANK(15); call step2(one,1)
+      END SELECT
+   RANK(1)
+      SELECT RANK(a2)
+      RANK(0); call step2(a1,size(a1))
+      RANK(1); call step2(a1,size(a1))
+      RANK(2); call step2(a1,size(a1))
+      RANK(3); call step2(a1,size(a1))
+      RANK(4); call step2(a1,size(a1))
+      RANK(5); call step2(a1,size(a1))
+      RANK(6); call step2(a1,size(a1))
+      RANK(7); call step2(a1,size(a1))
+      RANK(8); call step2(a1,size(a1))
+      RANK(9); call step2(a1,size(a1))
+      RANK(10); call step2(a1,size(a1))
+      RANK(11); call step2(a1,size(a1))
+      RANK(12); call step2(a1,size(a1))
+      RANK(13); call step2(a1,size(a1))
+      RANK(14); call step2(a1,size(a1))
+      RANK(15); call step2(a1,size(a1))
+      END SELECT
+   RANK(2)
+      SELECT RANK(a2)
+      RANK(0); call step2(a1,size(a1))
+      RANK(1); call step2(a1,size(a1))
+      RANK(2); call step2(a1,size(a1))
+      RANK(3); call step2(a1,size(a1))
+      RANK(4); call step2(a1,size(a1))
+      RANK(5); call step2(a1,size(a1))
+      RANK(6); call step2(a1,size(a1))
+      RANK(7); call step2(a1,size(a1))
+      RANK(8); call step2(a1,size(a1))
+      RANK(9); call step2(a1,size(a1))
+      RANK(10); call step2(a1,size(a1))
+      RANK(11); call step2(a1,size(a1))
+      RANK(12); call step2(a1,size(a1))
+      RANK(13); call step2(a1,size(a1))
+      RANK(14); call step2(a1,size(a1))
+      RANK(15); call step2(a1,size(a1))
+      END SELECT
+   RANK(3)
+      SELECT RANK(a2)
+      RANK(0); call step2(a1,size(a1))
+      RANK(1); call step2(a1,size(a1))
+      RANK(2); call step2(a1,size(a1))
+      RANK(3); call step2(a1,size(a1))
+      RANK(4); call step2(a1,size(a1))
+      RANK(5); call step2(a1,size(a1))
+      RANK(6); call step2(a1,size(a1))
+      RANK(7); call step2(a1,size(a1))
+      RANK(8); call step2(a1,size(a1))
+      RANK(9); call step2(a1,size(a1))
+      RANK(10); call step2(a1,size(a1))
+      RANK(11); call step2(a1,size(a1))
+      RANK(12); call step2(a1,size(a1))
+      RANK(13); call step2(a1,size(a1))
+      RANK(14); call step2(a1,size(a1))
+      RANK(15); call step2(a1,size(a1))
+      END SELECT
+   END SELECT
+contains
+subroutine step2(a3,isz)
+integer :: isz
+integer(kind=int8),intent(in) :: a3(isz)
+   SELECT RANK(a2)
+   RANK(0); call ecopy(a3,1,two,1);a2=two(1)
+   RANK(1); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(2); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(3); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(4); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(5); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(6); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(7); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(8); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(9); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(10); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(11); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(12); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(13); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(14); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(15); call ecopy(a3,size(a3),a2,size(a2))
+   END SELECT
+end subroutine step2
+
+subroutine ecopy(a1,n,a2,m)
+integer,intent(in) :: n,m
+integer(kind=int8),intent(in) :: a1(n) ! dimensioned with n, there is no rank/shape check
+integer(kind=int8)            :: a2(m) ! dimensioned with m, there is no rank/shape check
+integer :: ismall
+   ismall=min(n,m)       ! should warn as well
+   a2(:ismall)=a1(:ismall)
+end subroutine ecopy
+
+end subroutine elementcopy_int8
+
+subroutine elementcopy_int16(a1,a2) ! using assumed rank
+integer(kind=int16),intent(in) :: a1(..)
+integer(kind=int16)            :: a2(..)
+integer(kind=int16)            :: one(1), two(1)
+   SELECT RANK(a1)
+   RANK(0)
+      one=a1
+      SELECT RANK(a2)
+      RANK(0); call step2(one,1)
+      RANK(1); call step2(one,1)
+      RANK(2); call step2(one,1)
+      RANK(3); call step2(one,1)
+      RANK(4); call step2(one,1)
+      RANK(5); call step2(one,1)
+      RANK(6); call step2(one,1)
+      RANK(7); call step2(one,1)
+      RANK(8); call step2(one,1)
+      RANK(9); call step2(one,1)
+      RANK(10); call step2(one,1)
+      RANK(11); call step2(one,1)
+      RANK(12); call step2(one,1)
+      RANK(13); call step2(one,1)
+      RANK(14); call step2(one,1)
+      RANK(15); call step2(one,1)
+      END SELECT
+   RANK(1)
+      SELECT RANK(a2)
+      RANK(0); call step2(a1,size(a1))
+      RANK(1); call step2(a1,size(a1))
+      RANK(2); call step2(a1,size(a1))
+      RANK(3); call step2(a1,size(a1))
+      RANK(4); call step2(a1,size(a1))
+      RANK(5); call step2(a1,size(a1))
+      RANK(6); call step2(a1,size(a1))
+      RANK(7); call step2(a1,size(a1))
+      RANK(8); call step2(a1,size(a1))
+      RANK(9); call step2(a1,size(a1))
+      RANK(10); call step2(a1,size(a1))
+      RANK(11); call step2(a1,size(a1))
+      RANK(12); call step2(a1,size(a1))
+      RANK(13); call step2(a1,size(a1))
+      RANK(14); call step2(a1,size(a1))
+      RANK(15); call step2(a1,size(a1))
+      END SELECT
+   RANK(2)
+      SELECT RANK(a2)
+      RANK(0); call step2(a1,size(a1))
+      RANK(1); call step2(a1,size(a1))
+      RANK(2); call step2(a1,size(a1))
+      RANK(3); call step2(a1,size(a1))
+      RANK(4); call step2(a1,size(a1))
+      RANK(5); call step2(a1,size(a1))
+      RANK(6); call step2(a1,size(a1))
+      RANK(7); call step2(a1,size(a1))
+      RANK(8); call step2(a1,size(a1))
+      RANK(9); call step2(a1,size(a1))
+      RANK(10); call step2(a1,size(a1))
+      RANK(11); call step2(a1,size(a1))
+      RANK(12); call step2(a1,size(a1))
+      RANK(13); call step2(a1,size(a1))
+      RANK(14); call step2(a1,size(a1))
+      RANK(15); call step2(a1,size(a1))
+      END SELECT
+   RANK(3)
+      SELECT RANK(a2)
+      RANK(0); call step2(a1,size(a1))
+      RANK(1); call step2(a1,size(a1))
+      RANK(2); call step2(a1,size(a1))
+      RANK(3); call step2(a1,size(a1))
+      RANK(4); call step2(a1,size(a1))
+      RANK(5); call step2(a1,size(a1))
+      RANK(6); call step2(a1,size(a1))
+      RANK(7); call step2(a1,size(a1))
+      RANK(8); call step2(a1,size(a1))
+      RANK(9); call step2(a1,size(a1))
+      RANK(10); call step2(a1,size(a1))
+      RANK(11); call step2(a1,size(a1))
+      RANK(12); call step2(a1,size(a1))
+      RANK(13); call step2(a1,size(a1))
+      RANK(14); call step2(a1,size(a1))
+      RANK(15); call step2(a1,size(a1))
+      END SELECT
+   END SELECT
+contains
+subroutine step2(a3,isz)
+integer :: isz
+integer(kind=int16),intent(in) :: a3(isz)
+   SELECT RANK(a2)
+   RANK(0); call ecopy(a3,1,two,1);a2=two(1)
+   RANK(1); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(2); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(3); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(4); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(5); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(6); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(7); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(8); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(9); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(10); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(11); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(12); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(13); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(14); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(15); call ecopy(a3,size(a3),a2,size(a2))
+   END SELECT
+end subroutine step2
+
+subroutine ecopy(a1,n,a2,m)
+integer,intent(in) :: n,m
+integer(kind=int16),intent(in) :: a1(n) ! dimensioned with n, there is no rank/shape check
+integer(kind=int16)            :: a2(m) ! dimensioned with m, there is no rank/shape check
+integer :: ismall
+   ismall=min(n,m)       ! should warn as well
+   a2(:ismall)=a1(:ismall)
+end subroutine ecopy
+
+end subroutine elementcopy_int16
+
+subroutine elementcopy_int32(a1,a2) ! using assumed rank
+integer(kind=int32),intent(in) :: a1(..)
+integer(kind=int32)            :: a2(..)
+integer(kind=int32)            :: one(1), two(1)
+   SELECT RANK(a1)
+   RANK(0)
+      one=a1
+      SELECT RANK(a2)
+      RANK(0); call step2(one,1)
+      RANK(1); call step2(one,1)
+      RANK(2); call step2(one,1)
+      RANK(3); call step2(one,1)
+      RANK(4); call step2(one,1)
+      RANK(5); call step2(one,1)
+      RANK(6); call step2(one,1)
+      RANK(7); call step2(one,1)
+      RANK(8); call step2(one,1)
+      RANK(9); call step2(one,1)
+      RANK(10); call step2(one,1)
+      RANK(11); call step2(one,1)
+      RANK(12); call step2(one,1)
+      RANK(13); call step2(one,1)
+      RANK(14); call step2(one,1)
+      RANK(15); call step2(one,1)
+      END SELECT
+   RANK(1)
+      SELECT RANK(a2)
+      RANK(0); call step2(a1,size(a1))
+      RANK(1); call step2(a1,size(a1))
+      RANK(2); call step2(a1,size(a1))
+      RANK(3); call step2(a1,size(a1))
+      RANK(4); call step2(a1,size(a1))
+      RANK(5); call step2(a1,size(a1))
+      RANK(6); call step2(a1,size(a1))
+      RANK(7); call step2(a1,size(a1))
+      RANK(8); call step2(a1,size(a1))
+      RANK(9); call step2(a1,size(a1))
+      RANK(10); call step2(a1,size(a1))
+      RANK(11); call step2(a1,size(a1))
+      RANK(12); call step2(a1,size(a1))
+      RANK(13); call step2(a1,size(a1))
+      RANK(14); call step2(a1,size(a1))
+      RANK(15); call step2(a1,size(a1))
+      END SELECT
+   RANK(2)
+      SELECT RANK(a2)
+      RANK(0); call step2(a1,size(a1))
+      RANK(1); call step2(a1,size(a1))
+      RANK(2); call step2(a1,size(a1))
+      RANK(3); call step2(a1,size(a1))
+      RANK(4); call step2(a1,size(a1))
+      RANK(5); call step2(a1,size(a1))
+      RANK(6); call step2(a1,size(a1))
+      RANK(7); call step2(a1,size(a1))
+      RANK(8); call step2(a1,size(a1))
+      RANK(9); call step2(a1,size(a1))
+      RANK(10); call step2(a1,size(a1))
+      RANK(11); call step2(a1,size(a1))
+      RANK(12); call step2(a1,size(a1))
+      RANK(13); call step2(a1,size(a1))
+      RANK(14); call step2(a1,size(a1))
+      RANK(15); call step2(a1,size(a1))
+      END SELECT
+   RANK(3)
+      SELECT RANK(a2)
+      RANK(0); call step2(a1,size(a1))
+      RANK(1); call step2(a1,size(a1))
+      RANK(2); call step2(a1,size(a1))
+      RANK(3); call step2(a1,size(a1))
+      RANK(4); call step2(a1,size(a1))
+      RANK(5); call step2(a1,size(a1))
+      RANK(6); call step2(a1,size(a1))
+      RANK(7); call step2(a1,size(a1))
+      RANK(8); call step2(a1,size(a1))
+      RANK(9); call step2(a1,size(a1))
+      RANK(10); call step2(a1,size(a1))
+      RANK(11); call step2(a1,size(a1))
+      RANK(12); call step2(a1,size(a1))
+      RANK(13); call step2(a1,size(a1))
+      RANK(14); call step2(a1,size(a1))
+      RANK(15); call step2(a1,size(a1))
+      END SELECT
+   END SELECT
+contains
+subroutine step2(a3,isz)
+integer :: isz
+integer(kind=int32),intent(in) :: a3(isz)
+   SELECT RANK(a2)
+   RANK(0); call ecopy(a3,1,two,1);a2=two(1)
+   RANK(1); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(2); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(3); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(4); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(5); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(6); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(7); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(8); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(9); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(10); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(11); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(12); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(13); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(14); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(15); call ecopy(a3,size(a3),a2,size(a2))
+   END SELECT
+end subroutine step2
+
+subroutine ecopy(a1,n,a2,m)
+integer,intent(in) :: n,m
+integer(kind=int32),intent(in) :: a1(n) ! dimensioned with n, there is no rank/shape check
+integer(kind=int32)            :: a2(m) ! dimensioned with m, there is no rank/shape check
+integer :: ismall
+   ismall=min(n,m)       ! should warn as well
+   a2(:ismall)=a1(:ismall)
+end subroutine ecopy
+
+end subroutine elementcopy_int32
+
+subroutine elementcopy_int64(a1,a2) ! using assumed rank
+integer(kind=int64),intent(in) :: a1(..)
+integer(kind=int64)            :: a2(..)
+integer(kind=int64)            :: one(1), two(1)
+   SELECT RANK(a1)
+   RANK(0)
+      one=a1
+      SELECT RANK(a2)
+      RANK(0); call step2(one,1)
+      RANK(1); call step2(one,1)
+      RANK(2); call step2(one,1)
+      RANK(3); call step2(one,1)
+      RANK(4); call step2(one,1)
+      RANK(5); call step2(one,1)
+      RANK(6); call step2(one,1)
+      RANK(7); call step2(one,1)
+      RANK(8); call step2(one,1)
+      RANK(9); call step2(one,1)
+      RANK(10); call step2(one,1)
+      RANK(11); call step2(one,1)
+      RANK(12); call step2(one,1)
+      RANK(13); call step2(one,1)
+      RANK(14); call step2(one,1)
+      RANK(15); call step2(one,1)
+      END SELECT
+   RANK(1)
+      SELECT RANK(a2)
+      RANK(0); call step2(a1,size(a1))
+      RANK(1); call step2(a1,size(a1))
+      RANK(2); call step2(a1,size(a1))
+      RANK(3); call step2(a1,size(a1))
+      RANK(4); call step2(a1,size(a1))
+      RANK(5); call step2(a1,size(a1))
+      RANK(6); call step2(a1,size(a1))
+      RANK(7); call step2(a1,size(a1))
+      RANK(8); call step2(a1,size(a1))
+      RANK(9); call step2(a1,size(a1))
+      RANK(10); call step2(a1,size(a1))
+      RANK(11); call step2(a1,size(a1))
+      RANK(12); call step2(a1,size(a1))
+      RANK(13); call step2(a1,size(a1))
+      RANK(14); call step2(a1,size(a1))
+      RANK(15); call step2(a1,size(a1))
+      END SELECT
+   RANK(2)
+      SELECT RANK(a2)
+      RANK(0); call step2(a1,size(a1))
+      RANK(1); call step2(a1,size(a1))
+      RANK(2); call step2(a1,size(a1))
+      RANK(3); call step2(a1,size(a1))
+      RANK(4); call step2(a1,size(a1))
+      RANK(5); call step2(a1,size(a1))
+      RANK(6); call step2(a1,size(a1))
+      RANK(7); call step2(a1,size(a1))
+      RANK(8); call step2(a1,size(a1))
+      RANK(9); call step2(a1,size(a1))
+      RANK(10); call step2(a1,size(a1))
+      RANK(11); call step2(a1,size(a1))
+      RANK(12); call step2(a1,size(a1))
+      RANK(13); call step2(a1,size(a1))
+      RANK(14); call step2(a1,size(a1))
+      RANK(15); call step2(a1,size(a1))
+      END SELECT
+   RANK(3)
+      SELECT RANK(a2)
+      RANK(0); call step2(a1,size(a1))
+      RANK(1); call step2(a1,size(a1))
+      RANK(2); call step2(a1,size(a1))
+      RANK(3); call step2(a1,size(a1))
+      RANK(4); call step2(a1,size(a1))
+      RANK(5); call step2(a1,size(a1))
+      RANK(6); call step2(a1,size(a1))
+      RANK(7); call step2(a1,size(a1))
+      RANK(8); call step2(a1,size(a1))
+      RANK(9); call step2(a1,size(a1))
+      RANK(10); call step2(a1,size(a1))
+      RANK(11); call step2(a1,size(a1))
+      RANK(12); call step2(a1,size(a1))
+      RANK(13); call step2(a1,size(a1))
+      RANK(14); call step2(a1,size(a1))
+      RANK(15); call step2(a1,size(a1))
+      END SELECT
+   END SELECT
+contains
+subroutine step2(a3,isz)
+integer :: isz
+integer(kind=int64),intent(in) :: a3(isz)
+   SELECT RANK(a2)
+   RANK(0); call ecopy(a3,1,two,1);a2=two(1)
+   RANK(1); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(2); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(3); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(4); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(5); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(6); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(7); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(8); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(9); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(10); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(11); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(12); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(13); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(14); call ecopy(a3,size(a3),a2,size(a2))
+   RANK(15); call ecopy(a3,size(a3),a2,size(a2))
+   END SELECT
+end subroutine step2
+
+subroutine ecopy(a1,n,a2,m)
+integer,intent(in) :: n,m
+integer(kind=int64),intent(in) :: a1(n) ! dimensioned with n, there is no rank/shape check
+integer(kind=int64)            :: a2(m) ! dimensioned with m, there is no rank/shape check
+integer :: ismall
+   ismall=min(n,m)       ! should warn as well
+   a2(:ismall)=a1(:ismall)
+end subroutine ecopy
+
+end subroutine elementcopy_int64
+
 !==================================================================================================================================!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !==================================================================================================================================!
@@ -86,6 +1027,7 @@ contains
 !!    X1,X2     X1 and X2 are the upper and lower bound of the values
 !!              returned. The options can be of type REAL or INTEGER,
 !!              but must be of the same type.
+!!    N         number of values to return
 !!##RETURNS
 !!    LINSPACE  The returned row vector starts with X1 and ends with X2,
 !!              returning N evenly spaced values.
@@ -110,10 +1052,10 @@ contains
 !!
 !!   Results:
 function linspace_real128(x1,x2,n)
-integer,intent(in)             :: n
-real(kind=real128),intent(in)  :: x1,x2
-real(kind=real128)             :: linspace_real128(n)
-integer(kind=int64)            :: i
+integer,intent(in)               :: n
+real(kind=real128),intent(in) :: x1,x2
+real(kind=real128)            :: linspace_real128(n)
+integer(kind=int64)              :: i
    if(n.le.1)then
       linspace_real128=[x1,x2]
    else
@@ -122,10 +1064,10 @@ integer(kind=int64)            :: i
 end function linspace_real128
 !-----------------------------------------------------------------------------------------------------------------------------------
 function linspace_real64(x1,x2,n)
-integer,intent(in)             :: n
-real(kind=real64),intent(in)   :: x1,x2
-real(kind=real64)              :: linspace_real64(n)
-integer(kind=int64)            :: i
+integer,intent(in)               :: n
+real(kind=real64),intent(in) :: x1,x2
+real(kind=real64)            :: linspace_real64(n)
+integer(kind=int64)              :: i
    if(n.le.1)then
       linspace_real64=[x1,x2]
    else
@@ -134,10 +1076,10 @@ integer(kind=int64)            :: i
 end function linspace_real64
 !-----------------------------------------------------------------------------------------------------------------------------------
 function linspace_real32(x1,x2,n)
-integer,intent(in)             :: n
-real(kind=real32),intent(in)   :: x1,x2
-real(kind=real32)              :: linspace_real32(n)
-integer(kind=int64)            :: i
+integer,intent(in)               :: n
+real(kind=real32),intent(in) :: x1,x2
+real(kind=real32)            :: linspace_real32(n)
+integer(kind=int64)              :: i
    if(n.le.1)then
       linspace_real32=[x1,x2]
    else
@@ -146,10 +1088,10 @@ integer(kind=int64)            :: i
 end function linspace_real32
 !-----------------------------------------------------------------------------------------------------------------------------------
 function linspace_int64(x1,x2,n)
-integer,intent(in)             :: n
+integer,intent(in)               :: n
 integer(kind=int64),intent(in) :: x1,x2
 integer(kind=int64)            :: linspace_int64(n)
-integer(kind=int64)            :: i
+integer(kind=int64)              :: i
    if(n.le.1)then
       linspace_int64=[x1,x2]
    else
@@ -158,10 +1100,10 @@ integer(kind=int64)            :: i
 end function linspace_int64
 !-----------------------------------------------------------------------------------------------------------------------------------
 function linspace_int32(x1,x2,n)
-integer,intent(in)             :: n
+integer,intent(in)               :: n
 integer(kind=int32),intent(in) :: x1,x2
 integer(kind=int32)            :: linspace_int32(n)
-integer(kind=int64)            :: i
+integer(kind=int64)              :: i
    if(n.le.1)then
       linspace_int32=[x1,x2]
    else
@@ -170,10 +1112,10 @@ integer(kind=int64)            :: i
 end function linspace_int32
 !-----------------------------------------------------------------------------------------------------------------------------------
 function linspace_int16(x1,x2,n)
-integer,intent(in)             :: n
+integer,intent(in)               :: n
 integer(kind=int16),intent(in) :: x1,x2
 integer(kind=int16)            :: linspace_int16(n)
-integer(kind=int64)            :: i
+integer(kind=int64)              :: i
    if(n.le.1)then
       linspace_int16=[x1,x2]
    else
@@ -182,16 +1124,18 @@ integer(kind=int64)            :: i
 end function linspace_int16
 !-----------------------------------------------------------------------------------------------------------------------------------
 function linspace_int8(x1,x2,n)
-integer,intent(in)             :: n
-integer(kind=int8),intent(in)  :: x1,x2
-integer(kind=int8)             :: linspace_int8(n)
-integer(kind=int64)            :: i
+integer,intent(in)               :: n
+integer(kind=int8),intent(in) :: x1,x2
+integer(kind=int8)            :: linspace_int8(n)
+integer(kind=int64)              :: i
    if(n.le.1)then
       linspace_int8=[x1,x2]
    else
-   linspace_int8=[(x1+i*(x2-x1)/(n-1),i=0,n-1)]
+      linspace_int8=[(x1+i*(x2-x1)/(n-1),i=0,n-1)]
    endif
 end function linspace_int8
+!-----------------------------------------------------------------------------------------------------------------------------------
+!-----------------------------------------------------------------------------------------------------------------------------------
 !==================================================================================================================================!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !==================================================================================================================================!
@@ -1788,64 +2732,83 @@ end subroutine ml_wgesl
 !==================================================================================================================================!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !==================================================================================================================================!
+!>
+!!##NAME
+!!    WGEDI(3f) - [M_LA] computes the determinant and inverse of a matrix
+!!                using the factors computed by WGECO(3f) or WGEFA(3f).
+!!##SYNOPSIS
+!!
+!!    SUBROUTINE ML_WGEDI(AR,AI,LDA,N,IPVT,DETR,DETI,WORKR,WORKI,JOB)
+!!
+!!      INTEGER(KIND=4) :: LDA
+!!      REAL(KIND=8) :: AR(LDA,*)
+!!      REAL(KIND=8) :: AI(LDA,*)
+!!      INTEGER(KIND=4) :: N
+!!      INTEGER(KIND=4) :: IPVT(*)
+!!      REAL(KIND=8) :: DETR(2)
+!!      REAL(KIND=8) :: DETI(2)
+!!      REAL(KIND=8) :: WORKR(*)
+!!      REAL(KIND=8) :: WORKI(*)
+!!      INTEGER(KIND=4) :: JOB
+!!
+!!##DESCRIPTION
+!!    WGEDI(3f) computes the determinant and inverse of a matrix
+!!    using the factors computed by WGECO(3f) or WGEFA(3f).
+!!
+!!##ON ENTRY
+!!
+!!     A       Double-Complex(LDA, N)
+!!             The output from WGECO or WGEFA.
+!!
+!!     LDA     Integer
+!!             The leading dimension of the array A.
+!!
+!!     N       Integer
+!!             The order of the matrix A.
+!!
+!!     IPVT    Integer(N)
+!!             The pivot vector from WGECO(3f) or WGEFA(3f).
+!!
+!!     WORK    Double-Complex(N)
+!!             Work vector. Contents destroyed.
+!!
+!!     JOB     Integer
+!!
+!!              = 11   Both determinant and inverse.
+!!              = 01   Inverse only.
+!!              = 10   Determinant only.
+!!
+!!##ON RETURN
+!!
+!!     A       Inverse of original matrix if requested.
+!!             Otherwise unchanged.
+!!
+!!     DET     Double-complex(2)
+!!             Determinant of original matrix if requested.
+!!             Otherwise not referenced.
+!!
+!!              DETERMINANT = DET(1) * 10.0**DET(2)
+!!              with 1.0 .le. CABS1(DET(1) .lt. 10.0
+!!              or DET(1) .eq. 0.0 .
+!!
+!!##ERROR CONDITION
+!!
+!!    A division by zero will occur if the input factor contains a zero
+!!    on the diagonal and the inverse is requested. It will not occur if
+!!    the subroutines are called correctly and if WGECO(3f) has set RCOND
+!!    .gt. 0.0 or WGEFA(3f) has set INFO .eq. 0 .
+!!
+!!      LINPACK. THIS VERSION DATED 07/01/79 .
+!!      CLEVE MOLER, UNIVERSITY OF NEW MEXICO, ARGONNE NATIONAL LAB.
+!!
+!!##SUBROUTINES AND FUNCTIONS
+!!
+!!      BLAS WAXPY,mat_wscal,mat_wswap
+!!      FORTRAN DABS,MOD
 subroutine ml_wgedi(ar,ai,lda,n,ipvt,detr,deti,workr,worki,job)
       use m_la
       integer lda,n,ipvt(*),job
       doubleprecision ar(lda,*),ai(lda,*),detr(2),deti(2),workr(*),worki(*)
-!
-!     WGEDI COMPUTES THE DETERMINANT AND INVERSE OF A MATRIX
-!     USING THE FACTORS COMPUTED BY WGECO OR WGEFA.
-!
-!     ON ENTRY
-!
-!        A       DOUBLE-COMPLEX(LDA, N)
-!                THE OUTPUT FROM WGECO OR WGEFA.
-!
-!        LDA     INTEGER
-!                THE LEADING DIMENSION OF THE ARRAY  A .
-!
-!        N       INTEGER
-!                THE ORDER OF THE MATRIX  A .
-!
-!        IPVT    INTEGER(N)
-!                THE PIVOT VECTOR FROM WGECO OR WGEFA.
-!
-!        WORK    DOUBLE-COMPLEX(N)
-!                WORK VECTOR. CONTENTS DESTROYED.
-!
-!        JOB     INTEGER
-!                = 11   BOTH DETERMINANT AND INVERSE.
-!                = 01   INVERSE ONLY.
-!                = 10   DETERMINANT ONLY.
-!
-!     ON RETURN
-!
-!        A       INVERSE OF ORIGINAL MATRIX IF REQUESTED.
-!                OTHERWISE UNCHANGED.
-!
-!        DET     DOUBLE-COMPLEX(2)
-!                DETERMINANT OF ORIGINAL MATRIX IF REQUESTED.
-!                OTHERWISE NOT REFERENCED.
-!                DETERMINANT = DET(1) * 10.0**DET(2)
-!                WITH  1.0 .LE. CABS1(DET(1) .LT. 10.0
-!                OR  DET(1) .EQ. 0.0 .
-!
-!     ERROR CONDITION
-!
-!        A DIVISION BY ZERO WILL OCCUR IF THE INPUT FACTOR CONTAINS
-!        A ZERO ON THE DIAGONAL AND THE INVERSE IS REQUESTED.
-!        IT WILL NOT OCCUR IF THE SUBROUTINES ARE CALLED CORRECTLY
-!        AND IF WGECO HAS SET RCOND .GT. 0.0 OR WGEFA HAS SET
-!        INFO .EQ. 0 .
-!
-!     LINPACK. THIS VERSION DATED 07/01/79 .
-!     CLEVE MOLER, UNIVERSITY OF NEW MEXICO, ARGONNE NATIONAL LAB.
-!
-!     SUBROUTINES AND FUNCTIONS
-!
-!     BLAS WAXPY,mat_wscal,mat_wswap
-!     FORTRAN DABS,MOD
-!
 !     INTERNAL VARIABLES
 !
       doubleprecision tr,ti

@@ -11,7 +11,7 @@ keywords = ["fortran", "Arrays", "Linear Algebra"]
 homepage = "https://github.com/urbanjost/M_LA.git"
 
 #[install]
-#library="true"
+#library=true
 
 #[[test]]
 #name="test_suite"

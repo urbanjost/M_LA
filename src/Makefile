@@ -3,10 +3,8 @@
 
 NULL=
 PROGFILES = \
- ../example/demo_  \
- ../example/demo_  \
- ../example/demo_  \
- ../example/demo_  \
+ ../example/demo_elementcopy.f90  \
+ ../example/demo_linspace.f90  \
 $(NULL)
 
 TESTFILES = \
@@ -39,7 +37,9 @@ LDFLAGS :=
 # (-O1 and more).
 gfortran: F90=gfortran 
 gfortran: F90FLAGS := -g -O -Wall -std=f2018 -Wextra -Wno-maybe-uninitialized -Wno-uninitialized -finit-local-zero
+gfortran: F90FLAGS := -g -O -Wall            -Wextra -Wno-maybe-uninitialized -Wno-uninitialized -finit-local-zero
 gfortran: FFLAGS := -g -O -Wall -std=f2018 -Wextra -Wno-maybe-uninitialized -Wno-uninitialized -finit-local-zero
+gfortran: FFLAGS := -g -O -Wall            -Wextra -Wno-maybe-uninitialized -Wno-uninitialized -finit-local-zero
 gfortran: all
 	@echo built with $(F90)
 
