@@ -27,11 +27,11 @@ the fpm.toml project file.
         M_LA        = { git = "https://github.com/urbanjost/M_LA.git" }
 ```
 
-## DOCUMENTATION   ![docs](docs/images/docs.gif)
+## Documentation   ![docs](docs/images/docs.gif)
 
 ** **The documentation is nascent**. This is just a skeleton at the moment.
 
-### USER
+### User
 
    There are HTML documents for each subprogram in the style of man-pages:
 
@@ -47,13 +47,13 @@ the fpm.toml project file.
     + [manpages.tgz](https://urbanjost.github.io/M_LA/manpages.tgz)
  - [CHANGELOG](docs/CHANGELOG.md) provides a history of significant changes
 
-### DEVELOPER (__experimental__)
+### Developer (__experimental__)
 
  - The code was run through [ford(1)](https://politicalphysicist.github.io/ford-fortran-documentation.html)
    to produce a [developers' document](https://urbanjost.github.io/M_LA/fpm-ford/index.html).
  - [github action status](docs/STATUS.md)
 
-## DEMO PROGRAMS![demos](docs/images/demo.gif)
+## Demo Programs![demos](docs/images/demo.gif)
 
 Each man-page includes a working example program. These and additional
-examples are included in the example/ directory.
+examples are included in the [example/](example/) directory.

@@ -89,10 +89,10 @@ ship:
 	: make easily distributed archive files of manpages
 	mkdir -p ../docs
 	cd ../man/man3;\
-	   gzip *.3M_LA;\
+	   gzip *.3m_LA;\
 	   zip -r ../../docs/manpages.zip *gz;\
 	   tar cvfz ../../docs/manpages.tgz *gz;\
-	   gunzip *.3M_LA.gz
+	   gunzip *.3m_LA.gz
 
 .PHONY: run
 run: $(PROG)
@@ -115,7 +115,7 @@ doxygen:
 man:
 	@mandb ../man 1>&2
 	@env MANPATH=../man MANWIDTH=256 man -k .|col -b
-	@env MANPATH=../man MANWIDTH=80  man --regex '.*'|col -b
+	@env MANPATH=../man MANWIDTH=80  man -Tutf8 --regex '.*'|col -b
 
 .SUFFIXES: $(SUFFIXES) .f90 .F90
 
