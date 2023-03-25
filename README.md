@@ -29,7 +29,7 @@ the fpm.toml project file.
 
 ## Documentation   ![docs](docs/images/docs.gif)
 
-** **The documentation is nascent**. This is just a skeleton at the moment.
+**The documentation is nascent**. This is just a skeleton at the moment.
 
 ### User
 
