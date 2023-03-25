@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="description" content="M_LA module">
+    <meta name="author" content="John S. Urban" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>ml_corth &ndash; M_LA</title>
+
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+      <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+         <script src="../js/jquery-2.1.3.min.js"></script>
+         <script src="../js/svg-pan-zoom.min.js"></script>
+
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../index.html">M_LA </a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li class="dropdown hidden-xs visible-sm visible-md hidden-lg">
+              <a href="#" class="dropdown-toggle"
+                 data-toggle="dropdown" role="button"
+                 aria-haspopup="true"
+                 aria-expanded="false">
+                 Contents <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu">
+                    <li><a href="../lists/files.html">Source Files</a></li>
+                  <li><a href="../lists/modules.html">Modules</a></li>
+                  <li><a href="../lists/procedures.html">Procedures</a></li>
+              </ul>
+            </li>
+                <li class="visible-xs hidden-sm visible-lg">
+                  <a href="../lists/files.html">Source Files</a>
+                </li>
+              <li class="visible-xs hidden-sm visible-lg">
+                <a href="../lists/modules.html">Modules</a>
+              </li>
+              <li class="visible-xs hidden-sm visible-lg">
+                <a href="../lists/procedures.html">Procedures</a>
+              </li>
+          </ul>
+            <form action="../search.html" class="navbar-form navbar-right" role="search">
+              <div class="form-group">
+                <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+              </div>
+              <!--
+                  <button type="submit" class="btn btn-default">Submit</button>
+                  -->
+            </form>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+  <div class="row">
+    <h1>ml_corth
+      <small>Subroutine</small>
+      
+    </h1>
+      <div class="row" id="info-bar">
+    <div class="col-lg-12">
+      <div class="well well-sm">
+        <ul class="list-inline" style="margin-bottom:0px;display:inline">
+
+          <li id="statements"><i class="fa fa-list-ol"></i>
+            <a data-toggle="tooltip"
+               data-placement="bottom" data-html="true"
+               title=" 2.9% of total for procedures.">73 statements</a>
+          </li>
+
+            <li id="source-file">
+              <i class="fa fa-code"></i>
+              <a href="../src/M_LA.f90"> Source File</a>
+            </li>
+        </ul>
+        <ol class="breadcrumb in-well text-right">
+              <li><a href='../sourcefile/m_la.f90.html'>M_LA.f90</a></li>
+          <li class="active">ml_corth</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+  <script>
+    $(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+    })
+  </script>
+
+  </div>
+  
+  <div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+      <div id="sidebar">
+      <h3>Contents</h3>
+  
+      <div class="panel panel-primary">
+      <div class="panel-heading text-left">
+        <h3 class="panel-title">
+          <a data-toggle="collapse" href="#vars-0">Variables</a>
+        </h3>
+      </div>
+      <div id="vars-0" class="panel-collapse collapse">
+        <div class="list-group">
+            <a class="list-group-item" href="../proc/ml_corth.html#variable-f~3">f</a>
+            <a class="list-group-item" href="../proc/ml_corth.html#variable-fi~2">fi</a>
+            <a class="list-group-item" href="../proc/ml_corth.html#variable-fr">fr</a>
+            <a class="list-group-item" href="../proc/ml_corth.html#variable-g~3">g</a>
+            <a class="list-group-item" href="../proc/ml_corth.html#variable-h~3">h</a>
+            <a class="list-group-item" href="../proc/ml_corth.html#variable-i~6">i</a>
+            <a class="list-group-item" href="../proc/ml_corth.html#variable-ii~3">ii</a>
+            <a class="list-group-item" href="../proc/ml_corth.html#variable-j~7">j</a>
+            <a class="list-group-item" href="../proc/ml_corth.html#variable-jj">jj</a>
+            <a class="list-group-item" href="../proc/ml_corth.html#variable-kp1~4">kp1</a>
+            <a class="list-group-item" href="../proc/ml_corth.html#variable-la">la</a>
+            <a class="list-group-item" href="../proc/ml_corth.html#variable-m~3">m</a>
+            <a class="list-group-item" href="../proc/ml_corth.html#variable-mp">mp</a>
+            <a class="list-group-item" href="../proc/ml_corth.html#variable-scale~2">scale</a>
+        </div>
+      </div>
+    </div>
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    <div class="panel panel-primary">
+      <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+      <div class="list-group">
+        <a class="list-group-item" href="../proc/ml_corth.html#src">ml_corth</a>
+      </div>
+    </div>
+
+
+  </div>
+
+    </div>
+    
+    <div class="col-md-9" id='text'>
+    <h2> subroutine ml_corth(nm, n, low, igh, ar, ai, ortr, orti)  
+</h2>
+        <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Uses</h3>
+      </div>
+      <ul class="list-group">
+          <li class="list-group-item">
+            <ul class="list-inline">
+                <li><a href='../module/m_la.html'>M_LA</a></li>
+            </ul>
+          </li>
+      </ul>
+    </div>
+
+
+
+    <h3>Arguments</h3>
+        <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th>Type</th>
+<th>Intent</th><th>Optional</th>        <th>Attributes</th>
+        <th></th>
+        <th>Name</th>
+        <th></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-nm~4"></span>
+              integer
+            </td>
+<td></td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>nm</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-n~9"></span>
+              integer
+            </td>
+<td></td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>n</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-low"></span>
+              integer
+            </td>
+<td></td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>low</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-igh"></span>
+              integer
+            </td>
+<td></td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>igh</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-ar~7"></span>
+              doubleprecision
+            </td>
+<td></td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>ar</strong>(nm,n)</td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-ai~7"></span>
+              doubleprecision
+            </td>
+<td></td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>ai</strong>(nm,n)</td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-ortr"></span>
+              doubleprecision
+            </td>
+<td></td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>ortr</strong>(igh)</td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-orti"></span>
+              doubleprecision
+            </td>
+<td></td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>orti</strong>(igh)</td>
+            <td>
+                
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <br>
+
+    <section class="visible-xs visible-sm hidden-md">
+        <h3>Contents</h3>
+  
+      <div class="panel panel-primary">
+      <div class="panel-heading text-left">
+        <h3 class="panel-title">
+          <a data-toggle="collapse" href="#vars-1">Variables</a>
+        </h3>
+      </div>
+      <div id="vars-1" class="panel-collapse collapse">
+        <div class="list-group">
+            <a class="list-group-item" href="../proc/ml_corth.html#variable-f~3">f</a>
+            <a class="list-group-item" href="../proc/ml_corth.html#variable-fi~2">fi</a>
+            <a class="list-group-item" href="../proc/ml_corth.html#variable-fr">fr</a>
+            <a class="list-group-item" href="../proc/ml_corth.html#variable-g~3">g</a>
+            <a class="list-group-item" href="../proc/ml_corth.html#variable-h~3">h</a>
+            <a class="list-group-item" href="../proc/ml_corth.html#variable-i~6">i</a>
+            <a class="list-group-item" href="../proc/ml_corth.html#variable-ii~3">ii</a>
+            <a class="list-group-item" href="../proc/ml_corth.html#variable-j~7">j</a>
+            <a class="list-group-item" href="../proc/ml_corth.html#variable-jj">jj</a>
+            <a class="list-group-item" href="../proc/ml_corth.html#variable-kp1~4">kp1</a>
+            <a class="list-group-item" href="../proc/ml_corth.html#variable-la">la</a>
+            <a class="list-group-item" href="../proc/ml_corth.html#variable-m~3">m</a>
+            <a class="list-group-item" href="../proc/ml_corth.html#variable-mp">mp</a>
+            <a class="list-group-item" href="../proc/ml_corth.html#variable-scale~2">scale</a>
+        </div>
+      </div>
+    </div>
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    <div class="panel panel-primary">
+      <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+      <div class="list-group">
+        <a class="list-group-item" href="../proc/ml_corth.html#src">ml_corth</a>
+      </div>
+    </div>
+
+
+    </section>
+    <br class="visible-xs visible-sm hidden-md">
+
+
+    <section>    
+      <h2>Variables</h2>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th>Type</th>
+<th>Visibility</th>        <th>Attributes</th>
+        <th></th>
+        <th>Name</th>
+<th></th><th>Initial</th>        <th></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-f~3"></span>
+              doubleprecision,
+            </td>
+              <td>public</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>f</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-fi~2"></span>
+              doubleprecision,
+            </td>
+              <td>public</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>fi</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-fr"></span>
+              doubleprecision,
+            </td>
+              <td>public</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>fr</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-g~3"></span>
+              doubleprecision,
+            </td>
+              <td>public</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>g</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-h~3"></span>
+              doubleprecision,
+            </td>
+              <td>public</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>h</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-i~6"></span>
+              integer,
+            </td>
+              <td>public</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>i</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-ii~3"></span>
+              integer,
+            </td>
+              <td>public</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>ii</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-j~7"></span>
+              integer,
+            </td>
+              <td>public</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>j</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-jj"></span>
+              integer,
+            </td>
+              <td>public</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>jj</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-kp1~4"></span>
+              integer,
+            </td>
+              <td>public</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>kp1</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-la"></span>
+              integer,
+            </td>
+              <td>public</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>la</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-m~3"></span>
+              integer,
+            </td>
+              <td>public</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>m</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-mp"></span>
+              integer,
+            </td>
+              <td>public</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>mp</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-scale~2"></span>
+              doubleprecision,
+            </td>
+              <td>public</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>scale</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+                
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    </section>
+    <br>
+    
+    
+
+    
+    
+
+
+    
+    <section>
+    <h2><span class="anchor" id="src"></span>Source Code</h2>
+    <div class="highlight"><pre><span></span><span class="k">subroutine </span><span class="n">ml_corth</span><span class="p">(</span><span class="n">nm</span><span class="p">,</span><span class="n">n</span><span class="p">,</span><span class="n">low</span><span class="p">,</span><span class="n">igh</span><span class="p">,</span><span class="n">ar</span><span class="p">,</span><span class="n">ai</span><span class="p">,</span><span class="n">ortr</span><span class="p">,</span><span class="n">orti</span><span class="p">)</span><span class="w"></span>
+<span class="k">use </span><span class="n">m_la</span><span class="w"></span>
+<span class="c">!</span>
+<span class="kt">integer </span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">m</span><span class="p">,</span><span class="n">n</span><span class="p">,</span><span class="n">ii</span><span class="p">,</span><span class="n">jj</span><span class="p">,</span><span class="n">la</span><span class="p">,</span><span class="n">mp</span><span class="p">,</span><span class="n">nm</span><span class="p">,</span><span class="n">igh</span><span class="p">,</span><span class="n">kp1</span><span class="p">,</span><span class="n">low</span><span class="w"></span>
+<span class="n">doubleprecision</span><span class="w"> </span><span class="n">ar</span><span class="p">(</span><span class="n">nm</span><span class="p">,</span><span class="n">n</span><span class="p">),</span><span class="n">ai</span><span class="p">(</span><span class="n">nm</span><span class="p">,</span><span class="n">n</span><span class="p">),</span><span class="n">ortr</span><span class="p">(</span><span class="n">igh</span><span class="p">),</span><span class="n">orti</span><span class="p">(</span><span class="n">igh</span><span class="p">)</span><span class="w"></span>
+<span class="n">doubleprecision</span><span class="w"> </span><span class="n">f</span><span class="p">,</span><span class="n">g</span><span class="p">,</span><span class="n">h</span><span class="p">,</span><span class="n">fi</span><span class="p">,</span><span class="n">fr</span><span class="p">,</span><span class="nb">scale</span><span class="w"></span>
+<span class="c">!</span>
+<span class="c">!     THIS SUBROUTINE IS A TRANSLATION OF A COMPLEX ANALOGUE OF</span>
+<span class="c">!     THE ALGOL PROCEDURE ORTHES, NUM. MATH. 12, 349-368(1968)</span>
+<span class="c">!     BY MARTIN AND WILKINSON.</span>
+<span class="c">!     HANDBOOK FOR AUTO. COMP., VOL.II-LINEAR ALGEBRA, 339-358(1971).</span>
+<span class="c">!</span>
+<span class="c">!     GIVEN A COMPLEX GENERAL MATRIX, THIS SUBROUTINE</span>
+<span class="c">!     REDUCES A SUBMATRIX SITUATED IN ROWS AND COLUMNS</span>
+<span class="c">!     LOW THROUGH IGH TO UPPER HESSENBERG FORM BY</span>
+<span class="c">!     UNITARY SIMILARITY TRANSFORMATIONS.</span>
+<span class="c">!</span>
+<span class="c">!     ON INPUT.</span>
+<span class="c">!</span>
+<span class="c">!        NM MUST BE SET TO THE ROW DIMENSION OF TWO-DIMENSIONAL</span>
+<span class="c">!          ARRAY PARAMETERS AS DECLARED IN THE CALLING PROGRAM</span>
+<span class="c">!          DIMENSION STATEMENT.</span>
+<span class="c">!</span>
+<span class="c">!        N IS THE ORDER OF THE MATRIX.</span>
+<span class="c">!</span>
+<span class="c">!        LOW AND IGH ARE INTEGERS DETERMINED BY THE BALANCING</span>
+<span class="c">!          SUBROUTINE ML_CBAL. IF  CBAL  HAS NOT BEEN USED,</span>
+<span class="c">!          SET LOW=1, IGH=N.</span>
+<span class="c">!</span>
+<span class="c">!        AR AND AI CONTAIN THE REAL AND IMAGINARY PARTS,</span>
+<span class="c">!          RESPECTIVELY, OF THE COMPLEX INPUT MATRIX.</span>
+<span class="c">!</span>
+<span class="c">!     ON OUTPUT.</span>
+<span class="c">!</span>
+<span class="c">!        AR AND AI CONTAIN THE REAL AND IMAGINARY PARTS,</span>
+<span class="c">!          RESPECTIVELY, OF THE HESSENBERG MATRIX. INFORMATION</span>
+<span class="c">!          ABOUT THE UNITARY TRANSFORMATIONS USED IN THE REDUCTION</span>
+<span class="c">!          IS STORED IN THE REMAINING TRIANGLES UNDER THE</span>
+<span class="c">!          HESSENBERG MATRIX.</span>
+<span class="c">!</span>
+<span class="c">!        ORTR AND ORTI CONTAIN FURTHER INFORMATION ABOUT THE</span>
+<span class="c">!          TRANSFORMATIONS. ONLY ELEMENTS LOW THROUGH IGH ARE USED.</span>
+<span class="c">!</span>
+<span class="c">!     QUESTIONS AND COMMENTS SHOULD BE DIRECTED TO B. S. GARBOW,</span>
+<span class="c">!     APPLIED MATHEMATICS DIVISION, ARGONNE NATIONAL LABORATORY</span>
+<span class="c">!</span>
+<span class="c">!     ------------------------------------------------------------------</span>
+<span class="c">!</span>
+<span class="w">   </span><span class="n">la</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">igh</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
+<span class="w">   </span><span class="n">kp1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">low</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
+<span class="w">   </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">la</span><span class="w"> </span><span class="p">.</span><span class="n">lt</span><span class="p">.</span><span class="w"> </span><span class="n">kp1</span><span class="p">)</span><span class="w"> </span><span class="k">goto</span><span class="w"> </span><span class="mi">200</span><span class="w"></span>
+<span class="c">!</span>
+<span class="w">   </span><span class="k">do </span><span class="n">m</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">kp1</span><span class="p">,</span><span class="w"> </span><span class="n">la</span><span class="w"></span>
+<span class="w">      </span><span class="n">h</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0d0</span><span class="w"></span>
+<span class="w">      </span><span class="n">ortr</span><span class="p">(</span><span class="n">m</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0d0</span><span class="w"></span>
+<span class="w">      </span><span class="n">orti</span><span class="p">(</span><span class="n">m</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0d0</span><span class="w"></span>
+<span class="w">      </span><span class="nb">scale</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0d0</span><span class="w"></span>
+<span class="c">!     .......... SCALE COLUMN (ALGOL TOL THEN NOT NEEDED) ..........</span>
+<span class="w">      </span><span class="k">do </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">igh</span><span class="w"></span>
+<span class="w">         </span><span class="nb">scale</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mat_flop</span><span class="p">(</span><span class="nb">scale</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">dabs</span><span class="p">(</span><span class="n">ar</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">m</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">dabs</span><span class="p">(</span><span class="n">ai</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">m</span><span class="o">-</span><span class="mi">1</span><span class="p">)))</span><span class="w"></span>
+<span class="w">      </span><span class="k">enddo</span><span class="w"></span>
+<span class="c">!</span>
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">scale</span><span class="w"> </span><span class="p">.</span><span class="n">eq</span><span class="p">.</span><span class="w"> </span><span class="mf">0.0d0</span><span class="p">)</span><span class="w"> </span><span class="k">cycle</span>
+<span class="k">      </span><span class="n">mp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">igh</span><span class="w"></span>
+<span class="c">!     .......... FOR I=IGH STEP -1 UNTIL M DO -- ..........</span>
+<span class="w">      </span><span class="k">do </span><span class="n">ii</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">igh</span><span class="w"></span>
+<span class="w">         </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mp</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">ii</span><span class="w"></span>
+<span class="w">         </span><span class="n">ortr</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mat_flop</span><span class="p">(</span><span class="n">ar</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">m</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="nb">scale</span><span class="p">)</span><span class="w"></span>
+<span class="w">         </span><span class="n">orti</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mat_flop</span><span class="p">(</span><span class="n">ai</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">m</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="nb">scale</span><span class="p">)</span><span class="w"></span>
+<span class="w">         </span><span class="n">h</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mat_flop</span><span class="p">(</span><span class="n">h</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">ortr</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">*</span><span class="n">ortr</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">orti</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">*</span><span class="n">orti</span><span class="p">(</span><span class="n">i</span><span class="p">))</span><span class="w"></span>
+<span class="w">      </span><span class="k">enddo</span><span class="w"></span>
+<span class="c">!</span>
+<span class="w">      </span><span class="n">g</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mat_flop</span><span class="p">(</span><span class="nb">dsqrt</span><span class="p">(</span><span class="n">h</span><span class="p">))</span><span class="w"></span>
+<span class="w">      </span><span class="n">f</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mat_pythag</span><span class="p">(</span><span class="n">ortr</span><span class="p">(</span><span class="n">m</span><span class="p">),</span><span class="n">orti</span><span class="p">(</span><span class="n">m</span><span class="p">))</span><span class="w"></span>
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">f</span><span class="w"> </span><span class="p">.</span><span class="n">eq</span><span class="p">.</span><span class="w"> </span><span class="mf">0.0d0</span><span class="p">)</span><span class="w"> </span><span class="k">goto</span><span class="w"> </span><span class="mi">103</span><span class="w"></span>
+<span class="w">      </span><span class="n">h</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mat_flop</span><span class="p">(</span><span class="n">h</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">f</span><span class="o">*</span><span class="n">g</span><span class="p">)</span><span class="w"></span>
+<span class="w">      </span><span class="n">g</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mat_flop</span><span class="p">(</span><span class="n">g</span><span class="o">/</span><span class="n">f</span><span class="p">)</span><span class="w"></span>
+<span class="w">      </span><span class="n">ortr</span><span class="p">(</span><span class="n">m</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mat_flop</span><span class="p">((</span><span class="mf">1.0d0</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">g</span><span class="p">)</span><span class="o">*</span><span class="n">ortr</span><span class="p">(</span><span class="n">m</span><span class="p">))</span><span class="w"></span>
+<span class="w">      </span><span class="n">orti</span><span class="p">(</span><span class="n">m</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mat_flop</span><span class="p">((</span><span class="mf">1.0d0</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">g</span><span class="p">)</span><span class="o">*</span><span class="n">orti</span><span class="p">(</span><span class="n">m</span><span class="p">))</span><span class="w"></span>
+<span class="w">      </span><span class="k">goto</span><span class="w"> </span><span class="mi">105</span><span class="w"></span>
+<span class="c">!</span>
+<span class="mi">103</span><span class="w">   </span><span class="k">continue</span>
+<span class="k">      </span><span class="n">ortr</span><span class="p">(</span><span class="n">m</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">g</span><span class="w"></span>
+<span class="w">      </span><span class="n">ar</span><span class="p">(</span><span class="n">m</span><span class="p">,</span><span class="n">m</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">scale</span><span class="w"></span>
+<span class="c">!     .......... FORM (I-(U*UT)/H)*A ..........</span>
+<span class="mi">105</span><span class="w">   </span><span class="k">continue</span>
+<span class="k">      do </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="w"></span>
+<span class="w">         </span><span class="n">fr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0d0</span><span class="w"></span>
+<span class="w">         </span><span class="n">fi</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0d0</span><span class="w"></span>
+<span class="c">!     .......... FOR I=IGH STEP -1 UNTIL M DO -- ..........</span>
+<span class="w">         </span><span class="k">do </span><span class="n">ii</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">igh</span><span class="w"></span>
+<span class="w">            </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mp</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">ii</span><span class="w"></span>
+<span class="w">            </span><span class="n">fr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mat_flop</span><span class="p">(</span><span class="n">fr</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">ortr</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">*</span><span class="n">ar</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">orti</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">*</span><span class="n">ai</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">))</span><span class="w"></span>
+<span class="w">            </span><span class="n">fi</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mat_flop</span><span class="p">(</span><span class="n">fi</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">ortr</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">*</span><span class="n">ai</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">orti</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">*</span><span class="n">ar</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">))</span><span class="w"></span>
+<span class="w">         </span><span class="k">enddo</span><span class="w"></span>
+<span class="c">!</span>
+<span class="w">         </span><span class="n">fr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mat_flop</span><span class="p">(</span><span class="n">fr</span><span class="o">/</span><span class="n">h</span><span class="p">)</span><span class="w"></span>
+<span class="w">         </span><span class="n">fi</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mat_flop</span><span class="p">(</span><span class="n">fi</span><span class="o">/</span><span class="n">h</span><span class="p">)</span><span class="w"></span>
+<span class="c">!</span>
+<span class="w">         </span><span class="k">do </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">igh</span><span class="w"></span>
+<span class="w">            </span><span class="n">ar</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mat_flop</span><span class="p">(</span><span class="n">ar</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">fr</span><span class="o">*</span><span class="n">ortr</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">fi</span><span class="o">*</span><span class="n">orti</span><span class="p">(</span><span class="n">i</span><span class="p">))</span><span class="w"></span>
+<span class="w">            </span><span class="n">ai</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mat_flop</span><span class="p">(</span><span class="n">ai</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">fr</span><span class="o">*</span><span class="n">orti</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">fi</span><span class="o">*</span><span class="n">ortr</span><span class="p">(</span><span class="n">i</span><span class="p">))</span><span class="w"></span>
+<span class="w">         </span><span class="k">enddo</span><span class="w"></span>
+<span class="c">!</span>
+<span class="w">      </span><span class="k">enddo</span><span class="w"></span>
+<span class="c">!     .......... FORM (I-(U*UT)/H)*A*(I-(U*UT)/H) ..........</span>
+<span class="w">      </span><span class="k">do </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">igh</span><span class="w"></span>
+<span class="w">         </span><span class="n">fr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0d0</span><span class="w"></span>
+<span class="w">         </span><span class="n">fi</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0d0</span><span class="w"></span>
+<span class="c">!     .......... FOR J=IGH STEP -1 UNTIL M DO -- ..........</span>
+<span class="w">         </span><span class="k">do </span><span class="n">jj</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">igh</span><span class="w"></span>
+<span class="w">            </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mp</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">jj</span><span class="w"></span>
+<span class="w">            </span><span class="n">fr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mat_flop</span><span class="p">(</span><span class="n">fr</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">ortr</span><span class="p">(</span><span class="n">j</span><span class="p">)</span><span class="o">*</span><span class="n">ar</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">orti</span><span class="p">(</span><span class="n">j</span><span class="p">)</span><span class="o">*</span><span class="n">ai</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">))</span><span class="w"></span>
+<span class="w">            </span><span class="n">fi</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mat_flop</span><span class="p">(</span><span class="n">fi</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">ortr</span><span class="p">(</span><span class="n">j</span><span class="p">)</span><span class="o">*</span><span class="n">ai</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">orti</span><span class="p">(</span><span class="n">j</span><span class="p">)</span><span class="o">*</span><span class="n">ar</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">))</span><span class="w"></span>
+<span class="w">         </span><span class="k">enddo</span><span class="w"></span>
+<span class="c">!</span>
+<span class="w">         </span><span class="n">fr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mat_flop</span><span class="p">(</span><span class="n">fr</span><span class="o">/</span><span class="n">h</span><span class="p">)</span><span class="w"></span>
+<span class="w">         </span><span class="n">fi</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mat_flop</span><span class="p">(</span><span class="n">fi</span><span class="o">/</span><span class="n">h</span><span class="p">)</span><span class="w"></span>
+<span class="c">!</span>
+<span class="w">         </span><span class="k">do </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">igh</span><span class="w"></span>
+<span class="w">            </span><span class="n">ar</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mat_flop</span><span class="p">(</span><span class="n">ar</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">fr</span><span class="o">*</span><span class="n">ortr</span><span class="p">(</span><span class="n">j</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">fi</span><span class="o">*</span><span class="n">orti</span><span class="p">(</span><span class="n">j</span><span class="p">))</span><span class="w"></span>
+<span class="w">            </span><span class="n">ai</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mat_flop</span><span class="p">(</span><span class="n">ai</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">fr</span><span class="o">*</span><span class="n">orti</span><span class="p">(</span><span class="n">j</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">fi</span><span class="o">*</span><span class="n">ortr</span><span class="p">(</span><span class="n">j</span><span class="p">))</span><span class="w"></span>
+<span class="w">         </span><span class="k">enddo</span><span class="w"></span>
+<span class="c">!</span>
+<span class="w">      </span><span class="k">enddo</span><span class="w"></span>
+<span class="c">!</span>
+<span class="w">      </span><span class="n">ortr</span><span class="p">(</span><span class="n">m</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mat_flop</span><span class="p">(</span><span class="nb">scale</span><span class="o">*</span><span class="n">ortr</span><span class="p">(</span><span class="n">m</span><span class="p">))</span><span class="w"></span>
+<span class="w">      </span><span class="n">orti</span><span class="p">(</span><span class="n">m</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mat_flop</span><span class="p">(</span><span class="nb">scale</span><span class="o">*</span><span class="n">orti</span><span class="p">(</span><span class="n">m</span><span class="p">))</span><span class="w"></span>
+<span class="w">      </span><span class="n">ar</span><span class="p">(</span><span class="n">m</span><span class="p">,</span><span class="n">m</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mat_flop</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">g</span><span class="o">*</span><span class="n">ar</span><span class="p">(</span><span class="n">m</span><span class="p">,</span><span class="n">m</span><span class="o">-</span><span class="mi">1</span><span class="p">)))</span><span class="w"></span>
+<span class="w">      </span><span class="n">ai</span><span class="p">(</span><span class="n">m</span><span class="p">,</span><span class="n">m</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mat_flop</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">g</span><span class="o">*</span><span class="n">ai</span><span class="p">(</span><span class="n">m</span><span class="p">,</span><span class="n">m</span><span class="o">-</span><span class="mi">1</span><span class="p">)))</span><span class="w"></span>
+<span class="w">   </span><span class="k">enddo</span><span class="w"></span>
+<span class="c">!</span>
+<span class="mi">200</span><span class="w"> </span><span class="k">continue</span>
+<span class="k">end subroutine </span><span class="n">ml_corth</span><span class="w"></span>
+</pre></div>
+
+    </section>
+    <br>
+    
+    </div>
+  </div>
+
+      <hr>
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+        <div class="row">
+          <div class="col-xs-6 col-md-6"><p>M_LA was developed by John S. Urban<br>&copy; 2023 
+</p>
+          </div>
+          <div class="col-xs-6 col-md-6">
+            <p class="text-right">
+              Documentation generated by
+              <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
+ on 2023-03-25 20:00              </p>
+          </div>
+        </div>
+        <br>
+      </div> <!-- /container -->
+    </footer>
+
+    <!-- Bootstrap core JavaScript
+         ================================================== -->
+         <!-- Placed at the end of the document so the pages load faster -->
+    <!--
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        -->
+        <script src="../js/bootstrap.min.js"></script>
+        <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+        <script src="../js/ie10-viewport-bug-workaround.js"></script>
+
+        <!-- MathJax JavaScript
+             ================================================== -->
+             <!-- Placed at the end of the document so the pages load faster -->
+        <script type="text/x-mathjax-config">
+          MathJax.Hub.Config({
+          TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+          jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+          extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
+          });
+        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+          <script src="../tipuesearch/tipuesearch_content.js"></script>
+          <script src="../tipuesearch/tipuesearch_set.js"></script>
+          <script src="../tipuesearch/tipuesearch.js"></script>
+
+  </body>
+</html>
