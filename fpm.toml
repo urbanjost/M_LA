@@ -1,4 +1,4 @@
-# TOML file for fpm as described at https://github.com/fortran-lang/fpm/blob/master/manifest-reference.md
+# TOML file for fpm as described at https://fpm.fortran-lang.org/en/spec/manifest.html
 name = "M_LA"
 version = "0.1.0"
 license = "Public Domain"
@@ -10,9 +10,9 @@ categories = ["Linear Algebra"]
 keywords = ["fortran", "Arrays", "Linear Algebra"]
 homepage = "https://github.com/urbanjost/M_LA.git"
 
-[build]
-
 #ifdef FPMVERSION >= 0.8.0
+[build]
+module-naming = true
 # pre-version8 compatibility
 [fortran]
 implicit-typing = true
@@ -28,7 +28,7 @@ name="test_suite"
 source-dir="test"
 main="test_suite_M_LA.f90"
 [test.dependencies]
-M_msg          = { git = "https://github.com/urbanjost/M_msg.git" }
+M_framework          = { git = "https://github.com/urbanjost/M_framework.git" }
 
 #[[executable]]
 #name="mat"
@@ -36,7 +36,7 @@ M_msg          = { git = "https://github.com/urbanjost/M_msg.git" }
 #main="mat.f90"
 
 [dependencies]
-#M_msg          = { git = "https://github.com/urbanjost/M_msg.git" }
+#M_framework          = { git = "https://github.com/urbanjost/M_framework.git" }
 #M_strings      = { git = "https://github.com/urbanjost/M_strings.git" }
 #M_CLI2         = { git = "https://github.com/urbanjost/M_CLI2.git" }
 #M_list         = { git = "https://github.com/urbanjost/M_list.git" }
