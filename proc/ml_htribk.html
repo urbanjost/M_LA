@@ -51,7 +51,7 @@
                  Contents <span class="caret"></span>
               </a>
               <ul class="dropdown-menu">
-                    <li><a href="../lists/files.html">Source Files</a></li>
+                    <li><a href="../sourcefile/m_la.f90.html">Source File</a></li>
                   <li><a href="../lists/modules.html">Modules</a></li>
                   <li><a href="../lists/procedures.html">Procedures</a></li>
               </ul>
@@ -92,7 +92,7 @@
           <li id="statements"><i class="fa fa-list-ol"></i>
             <a data-toggle="tooltip"
                data-placement="bottom" data-html="true"
-               title=" 1.4% of total for procedures.">34 statements</a>
+               title=" 1.5% of total for procedures.">34 statements</a>
           </li>
 
             <li id="source-file">
@@ -519,91 +519,17 @@
     
     <section>
     <h2><span class="anchor" id="src"></span>Source Code</h2>
-    <div class="highlight"><pre><span></span><span class="k">subroutine </span><span class="n">ml_htribk</span><span class="p">(</span><span class="n">nm</span><span class="p">,</span><span class="n">n</span><span class="p">,</span><span class="n">ar</span><span class="p">,</span><span class="n">ai</span><span class="p">,</span><span class="n">tau</span><span class="p">,</span><span class="n">m</span><span class="p">,</span><span class="n">zr</span><span class="p">,</span><span class="n">zi</span><span class="p">)</span><span class="w"></span>
-<span class="k">use </span><span class="n">m_la</span><span class="w"></span>
-<span class="c">!</span>
-<span class="kt">integer </span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">,</span><span class="n">l</span><span class="p">,</span><span class="n">m</span><span class="p">,</span><span class="n">n</span><span class="p">,</span><span class="n">nm</span><span class="w"></span>
-<span class="n">doubleprecision</span><span class="w"> </span><span class="n">ar</span><span class="p">(</span><span class="n">nm</span><span class="p">,</span><span class="n">n</span><span class="p">),</span><span class="n">ai</span><span class="p">(</span><span class="n">nm</span><span class="p">,</span><span class="n">n</span><span class="p">),</span><span class="n">tau</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="n">n</span><span class="p">),</span><span class="n">zr</span><span class="p">(</span><span class="n">nm</span><span class="p">,</span><span class="n">m</span><span class="p">),</span><span class="n">zi</span><span class="p">(</span><span class="n">nm</span><span class="p">,</span><span class="n">m</span><span class="p">)</span><span class="w"></span>
-<span class="n">doubleprecision</span><span class="w"> </span><span class="n">h</span><span class="p">,</span><span class="n">s</span><span class="p">,</span><span class="n">si</span><span class="w"></span>
-<span class="c">!</span>
-<span class="c">!     THIS SUBROUTINE IS A TRANSLATION OF A COMPLEX ANALOGUE OF</span>
-<span class="c">!     THE ALGOL PROCEDURE TRBAK1, NUM. MATH. 11, 181-195(1968)</span>
-<span class="c">!     BY MARTIN, REINSCH, AND WILKINSON.</span>
-<span class="c">!     HANDBOOK FOR AUTO. COMP., VOL.II-LINEAR ALGEBRA, 212-226(1971).</span>
-<span class="c">!</span>
-<span class="c">!     THIS SUBROUTINE FORMS THE EIGENVECTORS OF A COMPLEX HERMITIAN</span>
-<span class="c">!     MATRIX BY BACK TRANSFORMING THOSE OF THE CORRESPONDING</span>
-<span class="c">!     REAL SYMMETRIC TRIDIAGONAL MATRIX DETERMINED BY  HTRIDI.</span>
-<span class="c">!</span>
-<span class="c">!     ON INPUT.</span>
-<span class="c">!</span>
-<span class="c">!        NM MUST BE SET TO THE ROW DIMENSION OF TWO-DIMENSIONAL</span>
-<span class="c">!          ARRAY PARAMETERS AS DECLARED IN THE CALLING PROGRAM</span>
-<span class="c">!          DIMENSION STATEMENT.</span>
-<span class="c">!</span>
-<span class="c">!        N IS THE ORDER OF THE MATRIX.</span>
-<span class="c">!</span>
-<span class="c">!        AR AND AI CONTAIN INFORMATION ABOUT THE UNITARY TRANS-</span>
-<span class="c">!          FORMATIONS USED IN THE REDUCTION BY  HTRIDI  IN THEIR</span>
-<span class="c">!          FULL LOWER TRIANGLES EXCEPT FOR THE DIAGONAL OF AR.</span>
-<span class="c">!</span>
-<span class="c">!        TAU CONTAINS FURTHER INFORMATION ABOUT THE TRANSFORMATIONS.</span>
-<span class="c">!</span>
-<span class="c">!        M IS THE NUMBER OF EIGENVECTORS TO BE BACK TRANSFORMED.</span>
-<span class="c">!</span>
-<span class="c">!        ZR CONTAINS THE EIGENVECTORS TO BE BACK TRANSFORMED</span>
-<span class="c">!          IN ITS FIRST M COLUMNS.</span>
-<span class="c">!</span>
-<span class="c">!     ON OUTPUT.</span>
-<span class="c">!</span>
-<span class="c">!        ZR AND ZI CONTAIN THE REAL AND IMAGINARY PARTS,</span>
-<span class="c">!          RESPECTIVELY, OF THE TRANSFORMED EIGENVECTORS</span>
-<span class="c">!          IN THEIR FIRST M COLUMNS.</span>
-<span class="c">!</span>
-<span class="c">!     NOTE THAT THE LAST COMPONENT OF EACH RETURNED VECTOR</span>
-<span class="c">!     IS REAL AND THAT VECTOR EUCLIDEAN NORMS ARE PRESERVED.</span>
-<span class="c">!</span>
-<span class="c">!     QUESTIONS AND COMMENTS SHOULD BE DIRECTED TO B. S. GARBOW,</span>
-<span class="c">!     APPLIED MATHEMATICS DIVISION, ARGONNE NATIONAL LABORATORY</span>
-<span class="c">!</span>
-<span class="c">!     ------------------------------------------------------------------</span>
-<span class="c">!</span>
-<span class="w">   </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">m</span><span class="w"> </span><span class="p">.</span><span class="n">eq</span><span class="p">.</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">goto</span><span class="w"> </span><span class="mi">200</span><span class="w"></span>
-<span class="c">!     .......... TRANSFORM THE EIGENVECTORS OF THE REAL SYMMETRIC</span>
-<span class="c">!                TRIDIAGONAL MATRIX TO THOSE OF THE HERMITIAN</span>
-<span class="c">!                TRIDIAGONAL MATRIX. ..........</span>
-<span class="w">   </span><span class="k">do </span><span class="n">k</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="w"></span>
-<span class="w">      </span><span class="k">do </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">m</span><span class="w"></span>
-<span class="w">         </span><span class="n">zi</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="n">j</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mat_flop</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">zr</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="n">j</span><span class="p">)</span><span class="o">*</span><span class="n">tau</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="n">k</span><span class="p">)))</span><span class="w"></span>
-<span class="w">         </span><span class="n">zr</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="n">j</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mat_flop</span><span class="p">(</span><span class="n">zr</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="n">j</span><span class="p">)</span><span class="o">*</span><span class="n">tau</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">k</span><span class="p">))</span><span class="w"></span>
-<span class="w">      </span><span class="k">enddo</span>
-<span class="k">   enddo</span><span class="w"></span>
-<span class="c">!</span>
-<span class="w">   </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="p">.</span><span class="n">eq</span><span class="p">.</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="k">goto</span><span class="w"> </span><span class="mi">200</span><span class="w"></span>
-<span class="c">!     .......... RECOVER AND APPLY THE HOUSEHOLDER MATRICES ..........</span>
-<span class="w">   </span><span class="k">do </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="w"></span>
-<span class="w">      </span><span class="n">l</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
-<span class="w">      </span><span class="n">h</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ai</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">i</span><span class="p">)</span><span class="w"></span>
-<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">h</span><span class="w"> </span><span class="p">.</span><span class="n">eq</span><span class="p">.</span><span class="w"> </span><span class="mf">0.0d0</span><span class="p">)</span><span class="w"> </span><span class="k">exit</span>
-<span class="k">      do </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">m</span><span class="w"></span>
-<span class="w">         </span><span class="n">s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0d0</span><span class="w"></span>
-<span class="w">         </span><span class="n">si</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0d0</span><span class="w"></span>
-<span class="w">         </span><span class="k">do </span><span class="n">k</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">l</span><span class="w"></span>
-<span class="w">            </span><span class="n">s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mat_flop</span><span class="p">(</span><span class="n">s</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">ar</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">k</span><span class="p">)</span><span class="o">*</span><span class="n">zr</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="n">j</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">ai</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">k</span><span class="p">)</span><span class="o">*</span><span class="n">zi</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="n">j</span><span class="p">))</span><span class="w"></span>
-<span class="w">            </span><span class="n">si</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mat_flop</span><span class="p">(</span><span class="n">si</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">ar</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">k</span><span class="p">)</span><span class="o">*</span><span class="n">zi</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="n">j</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">ai</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">k</span><span class="p">)</span><span class="o">*</span><span class="n">zr</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="n">j</span><span class="p">))</span><span class="w"></span>
-<span class="w">         </span><span class="k">enddo</span><span class="w"></span>
-<span class="c">!     .......... DOUBLE DIVISIONS AVOID POSSIBLE UNDERFLOW ..........</span>
-<span class="w">         </span><span class="n">s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mat_flop</span><span class="p">((</span><span class="n">s</span><span class="o">/</span><span class="n">h</span><span class="p">)</span><span class="o">/</span><span class="n">h</span><span class="p">)</span><span class="w"></span>
-<span class="w">         </span><span class="n">si</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mat_flop</span><span class="p">((</span><span class="n">si</span><span class="o">/</span><span class="n">h</span><span class="p">)</span><span class="o">/</span><span class="n">h</span><span class="p">)</span><span class="w"></span>
-<span class="w">         </span><span class="k">do </span><span class="n">k</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">l</span><span class="w"></span>
-<span class="w">            </span><span class="n">zr</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="n">j</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mat_flop</span><span class="p">(</span><span class="n">zr</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="n">j</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">s</span><span class="o">*</span><span class="n">ar</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">k</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">si</span><span class="o">*</span><span class="n">ai</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">k</span><span class="p">))</span><span class="w"></span>
-<span class="w">            </span><span class="n">zi</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="n">j</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mat_flop</span><span class="p">(</span><span class="n">zi</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="n">j</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">si</span><span class="o">*</span><span class="n">ar</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">k</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">s</span><span class="o">*</span><span class="n">ai</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">k</span><span class="p">))</span><span class="w"></span>
-<span class="w">         </span><span class="k">enddo</span>
-<span class="k">      enddo</span>
-<span class="k">   enddo</span><span class="w"></span>
-<span class="c">!</span>
-<span class="mi">200</span><span class="w"> </span><span class="k">continue</span>
-<span class="k">end subroutine </span><span class="n">ml_htribk</span><span class="w"></span>
+    <div class="highlight"><pre><span></span><span class="w">   </span><span class="k">SUBROUTINE </span><span class="n">ML_HTRIBK</span><span class="p">(</span><span class="n">NM</span><span class="p">,</span><span class="w"> </span><span class="n">N</span><span class="p">,</span><span class="w"> </span><span class="n">AR</span><span class="p">,</span><span class="w"> </span><span class="n">AI</span><span class="p">,</span><span class="w"> </span><span class="n">TAU</span><span class="p">,</span><span class="w"> </span><span class="n">M</span><span class="p">,</span><span class="w"> </span><span class="n">ZR</span><span class="p">,</span><span class="w"> </span><span class="n">ZI</span><span class="p">)</span><span class="w"></span>
+<span class="w">      </span><span class="k">import  </span><span class="n">int32</span><span class="p">,</span><span class="w"> </span><span class="n">real64</span><span class="w"></span>
+<span class="w">      </span><span class="kt">integer</span><span class="p">(</span><span class="nb">kind</span><span class="o">=</span><span class="n">int32</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">M</span><span class="w"></span>
+<span class="w">      </span><span class="kt">integer</span><span class="p">(</span><span class="nb">kind</span><span class="o">=</span><span class="n">int32</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">N</span><span class="w"></span>
+<span class="w">      </span><span class="kt">integer</span><span class="p">(</span><span class="nb">kind</span><span class="o">=</span><span class="n">int32</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">NM</span><span class="w"></span>
+<span class="w">      </span><span class="kt">real</span><span class="p">(</span><span class="nb">kind</span><span class="o">=</span><span class="n">real64</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">AR</span><span class="p">(</span><span class="n">NM</span><span class="p">,</span><span class="w"> </span><span class="n">N</span><span class="p">)</span><span class="w"></span>
+<span class="w">      </span><span class="kt">real</span><span class="p">(</span><span class="nb">kind</span><span class="o">=</span><span class="n">real64</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">AI</span><span class="p">(</span><span class="n">NM</span><span class="p">,</span><span class="w"> </span><span class="n">N</span><span class="p">)</span><span class="w"></span>
+<span class="w">      </span><span class="kt">real</span><span class="p">(</span><span class="nb">kind</span><span class="o">=</span><span class="n">real64</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">TAU</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="n">N</span><span class="p">)</span><span class="w"></span>
+<span class="w">      </span><span class="kt">real</span><span class="p">(</span><span class="nb">kind</span><span class="o">=</span><span class="n">real64</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">ZR</span><span class="p">(</span><span class="n">NM</span><span class="p">,</span><span class="w"> </span><span class="n">M</span><span class="p">)</span><span class="w"></span>
+<span class="w">      </span><span class="kt">real</span><span class="p">(</span><span class="nb">kind</span><span class="o">=</span><span class="n">real64</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">ZI</span><span class="p">(</span><span class="n">NM</span><span class="p">,</span><span class="w"> </span><span class="n">M</span><span class="p">)</span><span class="w"></span>
+<span class="w">   </span><span class="k">END SUBROUTINE </span><span class="n">ML_HTRIBK</span><span class="w"></span>
 </pre></div>
 
     </section>
@@ -624,7 +550,7 @@
             <p class="text-right">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2023-04-12 00:34              </p>
+ on 2023-04-20 03:00              </p>
           </div>
         </div>
         <br>

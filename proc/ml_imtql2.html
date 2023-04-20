@@ -51,7 +51,7 @@
                  Contents <span class="caret"></span>
               </a>
               <ul class="dropdown-menu">
-                    <li><a href="../lists/files.html">Source Files</a></li>
+                    <li><a href="../sourcefile/m_la.f90.html">Source File</a></li>
                   <li><a href="../lists/modules.html">Modules</a></li>
                   <li><a href="../lists/procedures.html">Procedures</a></li>
               </ul>
@@ -92,7 +92,7 @@
           <li id="statements"><i class="fa fa-list-ol"></i>
             <a data-toggle="tooltip"
                data-placement="bottom" data-html="true"
-               title=" 3.8% of total for procedures.">93 statements</a>
+               title=" 4.1% of total for procedures.">93 statements</a>
           </li>
 
             <li id="source-file">
@@ -674,176 +674,16 @@
     
     <section>
     <h2><span class="anchor" id="src"></span>Source Code</h2>
-    <div class="highlight"><pre><span></span><span class="k">subroutine </span><span class="n">ml_imtql2</span><span class="p">(</span><span class="n">nm</span><span class="p">,</span><span class="n">n</span><span class="p">,</span><span class="n">d</span><span class="p">,</span><span class="n">e</span><span class="p">,</span><span class="n">z</span><span class="p">,</span><span class="n">ierr</span><span class="p">,</span><span class="n">job</span><span class="p">)</span><span class="w"></span>
-<span class="w">      </span><span class="k">use </span><span class="n">m_la</span><span class="w"></span>
-<span class="w">      </span><span class="k">implicit none</span>
-<span class="k">      </span><span class="kt">integer </span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">,</span><span class="n">l</span><span class="p">,</span><span class="n">m</span><span class="p">,</span><span class="n">n</span><span class="p">,</span><span class="n">ii</span><span class="p">,</span><span class="n">nm</span><span class="p">,</span><span class="n">mml</span><span class="p">,</span><span class="n">ierr</span><span class="w"></span>
-<span class="w">      </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">job</span><span class="w"></span>
-<span class="w">      </span><span class="n">doubleprecision</span><span class="w"> </span><span class="n">d</span><span class="p">(</span><span class="n">n</span><span class="p">),</span><span class="n">e</span><span class="p">(</span><span class="n">n</span><span class="p">),</span><span class="n">z</span><span class="p">(</span><span class="n">nm</span><span class="p">,</span><span class="n">n</span><span class="p">)</span><span class="w"></span>
-<span class="w">      </span><span class="n">doubleprecision</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="p">,</span><span class="n">f</span><span class="p">,</span><span class="n">g</span><span class="p">,</span><span class="n">p</span><span class="p">,</span><span class="n">r</span><span class="p">,</span><span class="n">s</span><span class="w"></span>
-<span class="c">!</span>
-<span class="c">!     THIS SUBROUTINE IS A TRANSLATION OF THE ALGOL PROCEDURE IMTQL2,</span>
-<span class="c">!     NUM. MATH. 12, 377-383(1968) BY MARTIN AND WILKINSON,</span>
-<span class="c">!     AS MODIFIED IN NUM. MATH. 15, 450(1970) BY DUBRULLE.</span>
-<span class="c">!     HANDBOOK FOR AUTO. COMP., VOL.II-LINEAR ALGEBRA, 241-248(1971).</span>
-<span class="c">!</span>
-<span class="c">!     THIS SUBROUTINE FINDS THE EIGENVALUES AND EIGENVECTORS</span>
-<span class="c">!     OF A SYMMETRIC TRIDIAGONAL MATRIX BY THE IMPLICIT QL METHOD.</span>
-<span class="c">!     THE EIGENVECTORS OF A FULL SYMMETRIC MATRIX CAN ALSO</span>
-<span class="c">!     BE FOUND IF  TRED2  HAS BEEN USED TO REDUCE THIS</span>
-<span class="c">!     FULL MATRIX TO TRIDIAGONAL FORM.</span>
-<span class="c">!</span>
-<span class="c">!     ON INPUT.</span>
-<span class="c">!</span>
-<span class="c">!        NM MUST BE SET TO THE ROW DIMENSION OF TWO-DIMENSIONAL</span>
-<span class="c">!          ARRAY PARAMETERS AS DECLARED IN THE CALLING PROGRAM</span>
-<span class="c">!          DIMENSION STATEMENT.</span>
-<span class="c">!</span>
-<span class="c">!        N IS THE ORDER OF THE MATRIX.</span>
-<span class="c">!</span>
-<span class="c">!        D CONTAINS THE DIAGONAL ELEMENTS OF THE INPUT MATRIX.</span>
-<span class="c">!</span>
-<span class="c">!        E CONTAINS THE SUBDIAGONAL ELEMENTS OF THE INPUT MATRIX</span>
-<span class="c">!          IN ITS LAST N-1 POSITIONS. E(1) IS ARBITRARY.</span>
-<span class="c">!</span>
-<span class="c">!        Z CONTAINS THE TRANSFORMATION MATRIX PRODUCED IN THE</span>
-<span class="c">!          REDUCTION BY  TRED2, IF PERFORMED. IF THE EIGENVECTORS</span>
-<span class="c">!          OF THE TRIDIAGONAL MATRIX ARE DESIRED, Z MUST CONTAIN</span>
-<span class="c">!          THE IDENTITY MATRIX.</span>
-<span class="c">!</span>
-<span class="c">!      ON OUTPUT.</span>
-<span class="c">!</span>
-<span class="c">!        D CONTAINS THE EIGENVALUES IN ASCENDING ORDER. IF AN</span>
-<span class="c">!          ERROR EXIT IS MADE, THE EIGENVALUES ARE CORRECT BUT</span>
-<span class="c">!          UNORDERED FOR INDICES 1,2,...,IERR-1.</span>
-<span class="c">!</span>
-<span class="c">!        E HAS BEEN DESTROYED.</span>
-<span class="c">!</span>
-<span class="c">!        Z CONTAINS ORTHONORMAL EIGENVECTORS OF THE SYMMETRIC</span>
-<span class="c">!          TRIDIAGONAL (OR FULL) MATRIX. IF AN ERROR EXIT IS MADE,</span>
-<span class="c">!          Z CONTAINS THE EIGENVECTORS ASSOCIATED WITH THE STORED</span>
-<span class="c">!          EIGENVALUES.</span>
-<span class="c">!</span>
-<span class="c">!        IERR IS SET TO</span>
-<span class="c">!          ZERO       FOR NORMAL RETURN,</span>
-<span class="c">!          J          IF THE J-TH EIGENVALUE HAS NOT BEEN</span>
-<span class="c">!  DETERMINED AFTER 30 ITERATIONS.</span>
-<span class="c">!</span>
-<span class="c">!     QUESTIONS AND COMMENTS SHOULD BE DIRECTED TO B. S. GARBOW,</span>
-<span class="c">!     APPLIED MATHEMATICS DIVISION, ARGONNE NATIONAL LABORATORY</span>
-<span class="c">!</span>
-<span class="c">!     ------------------------------------------------------------------</span>
-<span class="c">!</span>
-<span class="c">!</span>
-<span class="c">!*****</span>
-<span class="c">!     MODIFIED BY C. MOLER TO ELIMINATE MACHEP 11/22/78</span>
-<span class="c">!     MODIFIED TO ADD JOB PARAMETER 08/27/79</span>
-<span class="c">!*****</span>
-<span class="w">      </span><span class="n">ierr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
-<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="p">.</span><span class="n">eq</span><span class="p">.</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="k">goto</span><span class="w"> </span><span class="mi">1001</span><span class="w"></span>
-<span class="c">!</span>
-<span class="w">      </span><span class="k">do </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="w"></span>
-<span class="w">         </span><span class="n">e</span><span class="p">(</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">e</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="w"></span>
-<span class="w">      </span><span class="k">enddo</span><span class="w"></span>
-<span class="c">!</span>
-<span class="w">      </span><span class="n">e</span><span class="p">(</span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0d0</span><span class="w"></span>
-<span class="c">!</span>
-<span class="w">      </span><span class="k">do </span><span class="mi">240</span><span class="w"> </span><span class="n">l</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="w"></span>
-<span class="w">         </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
-<span class="c">!     .......... LOOK FOR SMALL SUB-DIAGONAL ELEMENT ..........</span>
-<span class="w">  </span><span class="mi">105</span><span class="w">    </span><span class="k">continue</span>
-<span class="k">         do </span><span class="n">m</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">l</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="w"></span>
-<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">m</span><span class="w"> </span><span class="p">.</span><span class="n">eq</span><span class="p">.</span><span class="w"> </span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="k">goto</span><span class="w"> </span><span class="mi">120</span><span class="w"></span>
-<span class="c">!*****</span>
-<span class="w">            </span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mat_flop</span><span class="p">(</span><span class="nb">dabs</span><span class="p">(</span><span class="n">d</span><span class="p">(</span><span class="n">m</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">dabs</span><span class="p">(</span><span class="n">d</span><span class="p">(</span><span class="n">m</span><span class="o">+</span><span class="mi">1</span><span class="p">)))</span><span class="w"></span>
-<span class="w">            </span><span class="n">s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mat_flop</span><span class="p">(</span><span class="n">p</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">dabs</span><span class="p">(</span><span class="n">e</span><span class="p">(</span><span class="n">m</span><span class="p">)))</span><span class="w"></span>
-<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">p</span><span class="w"> </span><span class="p">.</span><span class="n">eq</span><span class="p">.</span><span class="w"> </span><span class="n">s</span><span class="p">)</span><span class="w"> </span><span class="k">goto</span><span class="w"> </span><span class="mi">120</span><span class="w"></span>
-<span class="c">!*****</span>
-<span class="w">         </span><span class="k">enddo</span><span class="w"></span>
-<span class="c">!</span>
-<span class="w">  </span><span class="mi">120</span><span class="w">    </span><span class="k">continue</span>
-<span class="k">         </span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">d</span><span class="p">(</span><span class="n">l</span><span class="p">)</span><span class="w"></span>
-<span class="w">         </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">m</span><span class="w"> </span><span class="p">.</span><span class="n">eq</span><span class="p">.</span><span class="w"> </span><span class="n">l</span><span class="p">)</span><span class="w"> </span><span class="k">goto</span><span class="w"> </span><span class="mi">240</span><span class="w"></span>
-<span class="w">         </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">j</span><span class="w"> </span><span class="p">.</span><span class="n">eq</span><span class="p">.</span><span class="w"> </span><span class="mi">30</span><span class="p">)</span><span class="w"> </span><span class="k">goto</span><span class="w"> </span><span class="mi">1000</span><span class="w"></span>
-<span class="w">         </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
-<span class="c">!     .......... FORM SHIFT ..........</span>
-<span class="w">         </span><span class="n">g</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mat_flop</span><span class="p">((</span><span class="n">d</span><span class="p">(</span><span class="n">l</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">p</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mf">2.0d0</span><span class="o">*</span><span class="n">e</span><span class="p">(</span><span class="n">l</span><span class="p">)))</span><span class="w"></span>
-<span class="w">         </span><span class="n">r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mat_flop</span><span class="p">(</span><span class="nb">dsqrt</span><span class="p">(</span><span class="n">g</span><span class="o">*</span><span class="n">g</span><span class="o">+</span><span class="mf">1.0d0</span><span class="p">))</span><span class="w"></span>
-<span class="w">         </span><span class="n">g</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mat_flop</span><span class="p">(</span><span class="n">d</span><span class="p">(</span><span class="n">m</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">e</span><span class="p">(</span><span class="n">l</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">g</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">dsign</span><span class="p">(</span><span class="n">r</span><span class="p">,</span><span class="n">g</span><span class="p">)))</span><span class="w"></span>
-<span class="w">         </span><span class="n">s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.0d0</span><span class="w"></span>
-<span class="w">         </span><span class="n">c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.0d0</span><span class="w"></span>
-<span class="w">         </span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0d0</span><span class="w"></span>
-<span class="w">         </span><span class="n">mml</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">l</span><span class="w"></span>
-<span class="c">!     .......... FOR I=M-1 STEP -1 UNTIL L DO -- ..........</span>
-<span class="w">         </span><span class="k">do </span><span class="mi">200</span><span class="w"> </span><span class="n">ii</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">mml</span><span class="w"></span>
-<span class="w">            </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">ii</span><span class="w"></span>
-<span class="w">            </span><span class="n">f</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mat_flop</span><span class="p">(</span><span class="n">s</span><span class="o">*</span><span class="n">e</span><span class="p">(</span><span class="n">i</span><span class="p">))</span><span class="w"></span>
-<span class="w">            </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mat_flop</span><span class="p">(</span><span class="n">c</span><span class="o">*</span><span class="n">e</span><span class="p">(</span><span class="n">i</span><span class="p">))</span><span class="w"></span>
-<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">dabs</span><span class="p">(</span><span class="n">f</span><span class="p">)</span><span class="w"> </span><span class="p">.</span><span class="n">lt</span><span class="p">.</span><span class="w"> </span><span class="nb">dabs</span><span class="p">(</span><span class="n">g</span><span class="p">))</span><span class="w"> </span><span class="k">goto</span><span class="w"> </span><span class="mi">150</span><span class="w"></span>
-<span class="w">            </span><span class="n">c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mat_flop</span><span class="p">(</span><span class="n">g</span><span class="o">/</span><span class="n">f</span><span class="p">)</span><span class="w"></span>
-<span class="w">            </span><span class="n">r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mat_flop</span><span class="p">(</span><span class="nb">dsqrt</span><span class="p">(</span><span class="n">c</span><span class="o">*</span><span class="n">c</span><span class="o">+</span><span class="mf">1.0d0</span><span class="p">))</span><span class="w"></span>
-<span class="w">            </span><span class="n">e</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mat_flop</span><span class="p">(</span><span class="n">f</span><span class="o">*</span><span class="n">r</span><span class="p">)</span><span class="w"></span>
-<span class="w">            </span><span class="n">s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mat_flop</span><span class="p">(</span><span class="mf">1.0d0</span><span class="o">/</span><span class="n">r</span><span class="p">)</span><span class="w"></span>
-<span class="w">            </span><span class="n">c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mat_flop</span><span class="p">(</span><span class="n">c</span><span class="o">*</span><span class="n">s</span><span class="p">)</span><span class="w"></span>
-<span class="w">            </span><span class="k">goto</span><span class="w"> </span><span class="mi">160</span><span class="w"></span>
-<span class="w">  </span><span class="mi">150</span><span class="w">       </span><span class="n">s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mat_flop</span><span class="p">(</span><span class="n">f</span><span class="o">/</span><span class="n">g</span><span class="p">)</span><span class="w"></span>
-<span class="w">            </span><span class="n">r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mat_flop</span><span class="p">(</span><span class="nb">dsqrt</span><span class="p">(</span><span class="n">s</span><span class="o">*</span><span class="n">s</span><span class="o">+</span><span class="mf">1.0d0</span><span class="p">))</span><span class="w"></span>
-<span class="w">            </span><span class="n">e</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mat_flop</span><span class="p">(</span><span class="n">g</span><span class="o">*</span><span class="n">r</span><span class="p">)</span><span class="w"></span>
-<span class="w">            </span><span class="n">c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mat_flop</span><span class="p">(</span><span class="mf">1.0d0</span><span class="o">/</span><span class="n">r</span><span class="p">)</span><span class="w"></span>
-<span class="w">            </span><span class="n">s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mat_flop</span><span class="p">(</span><span class="n">s</span><span class="o">*</span><span class="n">c</span><span class="p">)</span><span class="w"></span>
-<span class="w">  </span><span class="mi">160</span><span class="w">       </span><span class="n">g</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mat_flop</span><span class="p">(</span><span class="n">d</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">p</span><span class="p">)</span><span class="w"></span>
-<span class="w">            </span><span class="n">r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mat_flop</span><span class="p">((</span><span class="n">d</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">g</span><span class="p">)</span><span class="o">*</span><span class="n">s</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mf">2.0d0</span><span class="o">*</span><span class="n">c</span><span class="o">*</span><span class="n">b</span><span class="p">)</span><span class="w"></span>
-<span class="w">            </span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mat_flop</span><span class="p">(</span><span class="n">s</span><span class="o">*</span><span class="n">r</span><span class="p">)</span><span class="w"></span>
-<span class="w">            </span><span class="n">d</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">g</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">p</span><span class="w"></span>
-<span class="w">            </span><span class="n">g</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mat_flop</span><span class="p">(</span><span class="n">c</span><span class="o">*</span><span class="n">r</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"></span>
-<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">job</span><span class="w"> </span><span class="p">.</span><span class="n">eq</span><span class="p">.</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">goto</span><span class="w"> </span><span class="mi">185</span><span class="w"></span>
-<span class="c">!     .......... FORM VECTOR ..........</span>
-<span class="w">            </span><span class="k">do </span><span class="n">k</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="w"></span>
-<span class="w">               </span><span class="n">f</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">z</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
-<span class="w">               </span><span class="n">z</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mat_flop</span><span class="p">(</span><span class="n">s</span><span class="o">*</span><span class="n">z</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">c</span><span class="o">*</span><span class="n">f</span><span class="p">)</span><span class="w"></span>
-<span class="w">               </span><span class="n">z</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mat_flop</span><span class="p">(</span><span class="n">c</span><span class="o">*</span><span class="n">z</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">s</span><span class="o">*</span><span class="n">f</span><span class="p">)</span><span class="w"></span>
-<span class="w">            </span><span class="k">enddo</span>
-<span class="k">  </span><span class="mi">185</span><span class="w">       </span><span class="k">continue</span><span class="w"></span>
-<span class="c">!</span>
-<span class="w">  </span><span class="mi">200</span><span class="w">    </span><span class="k">continue</span><span class="w"></span>
-<span class="c">!</span>
-<span class="w">         </span><span class="n">d</span><span class="p">(</span><span class="n">l</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mat_flop</span><span class="p">(</span><span class="n">d</span><span class="p">(</span><span class="n">l</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">p</span><span class="p">)</span><span class="w"></span>
-<span class="w">         </span><span class="n">e</span><span class="p">(</span><span class="n">l</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">g</span><span class="w"></span>
-<span class="w">         </span><span class="n">e</span><span class="p">(</span><span class="n">m</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0d0</span><span class="w"></span>
-<span class="w">         </span><span class="k">goto</span><span class="w"> </span><span class="mi">105</span><span class="w"></span>
-<span class="w">  </span><span class="mi">240</span><span class="w"> </span><span class="k">continue</span><span class="w"></span>
-<span class="c">!     .......... ORDER EIGENVALUES AND EIGENVECTORS ..........</span>
-<span class="w">      </span><span class="k">do </span><span class="n">ii</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="w"></span>
-<span class="w">         </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ii</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
-<span class="w">         </span><span class="n">k</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="w"></span>
-<span class="w">         </span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">d</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="w"></span>
-<span class="c">!</span>
-<span class="w">         </span><span class="k">do </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ii</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="w"></span>
-<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">d</span><span class="p">(</span><span class="n">j</span><span class="p">)</span><span class="w"> </span><span class="p">.</span><span class="n">ge</span><span class="p">.</span><span class="w"> </span><span class="n">p</span><span class="p">)</span><span class="w"> </span><span class="k">exit</span>
-<span class="k">            </span><span class="n">k</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">j</span><span class="w"></span>
-<span class="w">            </span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">d</span><span class="p">(</span><span class="n">j</span><span class="p">)</span><span class="w"></span>
-<span class="w">         </span><span class="k">enddo</span><span class="w"></span>
-<span class="c">!</span>
-<span class="w">         </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">k</span><span class="w"> </span><span class="p">.</span><span class="n">eq</span><span class="p">.</span><span class="w"> </span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="k">exit</span>
-<span class="k">         </span><span class="n">d</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">d</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="w"></span>
-<span class="w">         </span><span class="n">d</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p</span><span class="w"></span>
-<span class="c">!</span>
-<span class="w">         </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">job</span><span class="w"> </span><span class="p">.</span><span class="n">eq</span><span class="p">.</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">cycle</span>
-<span class="k">         do </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="w"></span>
-<span class="w">            </span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">z</span><span class="p">(</span><span class="n">j</span><span class="p">,</span><span class="n">i</span><span class="p">)</span><span class="w"></span>
-<span class="w">            </span><span class="n">z</span><span class="p">(</span><span class="n">j</span><span class="p">,</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">z</span><span class="p">(</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">)</span><span class="w"></span>
-<span class="w">            </span><span class="n">z</span><span class="p">(</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p</span><span class="w"></span>
-<span class="w">         </span><span class="k">enddo</span>
-<span class="k">      enddo</span><span class="w"></span>
-<span class="c">!</span>
-<span class="w">      </span><span class="k">goto</span><span class="w"> </span><span class="mi">1001</span><span class="w"></span>
-<span class="c">!     .......... SET ERROR -- NO CONVERGENCE TO AN</span>
-<span class="c">!                EIGENVALUE AFTER 30 ITERATIONS ..........</span>
-<span class="w"> </span><span class="mi">1000</span><span class="w"> </span><span class="k">continue</span>
-<span class="k">      </span><span class="n">ierr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">l</span><span class="w"></span>
-<span class="w"> </span><span class="mi">1001</span><span class="w"> </span><span class="k">continue</span>
-<span class="k">      return</span>
-<span class="k">      end subroutine </span><span class="n">ml_imtql2</span><span class="w"></span>
+    <div class="highlight"><pre><span></span><span class="w">   </span><span class="k">SUBROUTINE </span><span class="n">ML_IMTQL2</span><span class="p">(</span><span class="n">NM</span><span class="p">,</span><span class="w"> </span><span class="n">N</span><span class="p">,</span><span class="w"> </span><span class="n">D</span><span class="p">,</span><span class="w"> </span><span class="n">E</span><span class="p">,</span><span class="w"> </span><span class="n">Z</span><span class="p">,</span><span class="w"> </span><span class="n">IERR</span><span class="p">,</span><span class="w"> </span><span class="n">JOB</span><span class="p">)</span><span class="w"></span>
+<span class="w">      </span><span class="k">import  </span><span class="n">int32</span><span class="p">,</span><span class="w"> </span><span class="n">real64</span><span class="w"></span>
+<span class="w">      </span><span class="kt">integer</span><span class="p">(</span><span class="nb">kind</span><span class="o">=</span><span class="n">int32</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">N</span><span class="w"></span>
+<span class="w">      </span><span class="kt">integer</span><span class="p">(</span><span class="nb">kind</span><span class="o">=</span><span class="n">int32</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">NM</span><span class="w"></span>
+<span class="w">      </span><span class="kt">real</span><span class="p">(</span><span class="nb">kind</span><span class="o">=</span><span class="n">real64</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">D</span><span class="p">(</span><span class="n">N</span><span class="p">)</span><span class="w"></span>
+<span class="w">      </span><span class="kt">real</span><span class="p">(</span><span class="nb">kind</span><span class="o">=</span><span class="n">real64</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">E</span><span class="p">(</span><span class="n">N</span><span class="p">)</span><span class="w"></span>
+<span class="w">      </span><span class="kt">real</span><span class="p">(</span><span class="nb">kind</span><span class="o">=</span><span class="n">real64</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">Z</span><span class="p">(</span><span class="n">NM</span><span class="p">,</span><span class="w"> </span><span class="n">N</span><span class="p">)</span><span class="w"></span>
+<span class="w">      </span><span class="kt">integer</span><span class="p">(</span><span class="nb">kind</span><span class="o">=</span><span class="n">int32</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">IERR</span><span class="w"></span>
+<span class="w">      </span><span class="kt">integer</span><span class="p">(</span><span class="nb">kind</span><span class="o">=</span><span class="n">int32</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">JOB</span><span class="w"></span>
+<span class="w">   </span><span class="k">END SUBROUTINE </span><span class="n">ML_IMTQL2</span><span class="w"></span>
 </pre></div>
 
     </section>
@@ -864,7 +704,7 @@
             <p class="text-right">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2023-04-12 00:34              </p>
+ on 2023-04-20 03:00              </p>
           </div>
         </div>
         <br>
