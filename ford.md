@@ -4,6 +4,7 @@ output_dir: docs/fpm-ford
 project: M_LA
 summary: M_LA module
 project_github: https://github.com/urbanjost/M_LA
+project_download: https://github.com/urbanjost/M_LA/archive/refs/heads/master.zip
 project_download:
 author: John S. Urban
 author_email: urbanjost@comcast.net

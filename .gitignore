@@ -1,0 +1,6 @@
+build/*
+FODDER/*
+src/source/
+app/source/
+man/
+docs/doxygen_out
