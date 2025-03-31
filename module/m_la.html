@@ -10,16 +10,31 @@
     <meta name="author" content="John S. Urban" >
     <link rel="icon" href="../favicon.png">
 
-    <title>M_LA &ndash; M_LA</title>
+    <title>m_la &ndash; M_LA</title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-    <link href="../css/pygments.css" rel="stylesheet">
-    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <!-- Font Awesome -->
+    <link href="../css/fontawesome.min.css" rel="stylesheet">
+    <link href="../css/brands.min.css" rel="stylesheet">
+    <link href="../css/regular.min.css" rel="stylesheet">
+    <link href="../css/solid.min.css" rel="stylesheet">
+    <link href="../css/v4-font-face.min.css" rel="stylesheet">
+    <link href="../css/v4-shims.min.css" rel="stylesheet">
+    <!-- MathJax -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+      });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async
+            integrity="sha256-DViIOMYdwlM/axqoGDPeUyf0urLoHMN4QACBKyB58Uw=" crossorigin="anonymous"></script>
+    <!-- Other scripts and stylesheets -->
     <link href="../css/local.css" rel="stylesheet">
-      <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
-
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <link href="../css/pygments.css" rel="stylesheet">
     <script src="../js/svg-pan-zoom.min.js"></script>
   </head>
 
@@ -38,7 +53,7 @@
           <div id="navbar" class="navbar-collapse collapse">
             <ul class="navbar-nav">
                   <li class="nav-item">
-                    <a class="nav-link" href="sourcefile/m_la.f90.html">Source File</a>
+                    <a class="nav-link" href="../sourcefile/m_la.f90.html">Source File</a>
                   </li>
                 <li class="nav-item">
                   <a class="nav-link" href="../lists/modules.html">Modules</a>
@@ -59,7 +74,7 @@
 
     <div class="container">
   <div class="row">
-    <h1>M_LA
+    <h1>m_la
       <small>Module</small>
       
     </h1>
@@ -69,9 +84,8 @@
         <ul class="list-inline" style="margin-bottom:0px;display:inline">
 
             <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
-              <a data-bs-toggle="tooltip"
-                 data-bs-placement="bottom" data-html="true"
-                 title="100.0% of total for modules and submodules.">2482 statements</a>
+              <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true"
+                 title="100.0% of total for modules and submodules.">2495 statements</a>
             </li>
 
             <li class="list-inline-item" id="source-file">
@@ -84,16 +98,18 @@
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb justify-content-end mb-0">
                 <li class="breadcrumb-item"><a href='../sourcefile/m_la.f90.html'>M_LA.f90</a></li>
-            <li class="breadcrumb-item active" aria-current="page">M_LA</li>
+            <li class="breadcrumb-item active" aria-current="page">m_la</li>
           </ol>
         </nav>
       </div>
     </div>
   </div>
   <script>
-    $(function () {
-    $('[data-bs-toggle="tooltip"]').tooltip()
-    })
+    // Enable Bootstrap tooltips
+    (function () {
+      const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+      const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+    })();
   </script>
 
   </div>
@@ -168,6 +184,7 @@
             <a class="list-group-item" href="../module/m_la.html#proc-mat_wlog">mat_wlog</a>
             <a class="list-group-item" href="../module/m_la.html#proc-mat_wmul">mat_wmul</a>
             <a class="list-group-item" href="../module/m_la.html#proc-mat_wpofa">mat_wpofa</a>
+            <a class="list-group-item" href="../module/m_la.html#proc-mat_wpow">mat_wpow</a>
             <a class="list-group-item" href="../module/m_la.html#proc-mat_wrscal">mat_wrscal</a>
             <a class="list-group-item" href="../module/m_la.html#proc-mat_wscal">mat_wscal</a>
             <a class="list-group-item" href="../module/m_la.html#proc-mat_wset">mat_wset</a>
@@ -192,7 +209,7 @@
     </div>
 
     <div class="col-md-9" id='text'>
-      
+      <p>==mat_wpofa.f90 processed by SPAG 8.01RF 01:46 13 Dec 2024</p>
 <br>          <div class="card mb-4">
       <h3 class="card-header card-title bg-light">Uses</h3>
       <div class="card-body">
@@ -789,7 +806,7 @@ and always includes the endpoints, the results being the same as
           returning N evenly spaced values.
 </code></pre></div>
 
-<h2 id="example">EXAMPLE</h2>
+<h2 id="examples">EXAMPLES</h2>
 <p>Sample program:</p>
 <div class="codehilite"><pre><span></span><code><span class="nx">program</span><span class="w"> </span><span class="nx">demo_linspace</span>
 <span class="nx">use</span><span class="w"> </span><span class="nx">M_LA</span><span class="p">,</span><span class="w">  </span><span class="nx">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nx">linspace</span>
@@ -852,7 +869,7 @@ and always includes the endpoints, the results being the same as
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-n~8"></span>
+              <span class="anchor" id="variable-n~21"></span>
               integer,
             </td>
 <td>intent(in)</td>
@@ -925,7 +942,7 @@ and always includes the endpoints, the results being the same as
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-n~9"></span>
+              <span class="anchor" id="variable-n~22"></span>
               integer,
             </td>
 <td>intent(in)</td>
@@ -998,7 +1015,7 @@ and always includes the endpoints, the results being the same as
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-n~10"></span>
+              <span class="anchor" id="variable-n~23"></span>
               integer,
             </td>
 <td>intent(in)</td>
@@ -1071,7 +1088,7 @@ and always includes the endpoints, the results being the same as
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-n~11"></span>
+              <span class="anchor" id="variable-n~24"></span>
               integer,
             </td>
 <td>intent(in)</td>
@@ -1144,7 +1161,7 @@ and always includes the endpoints, the results being the same as
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-n~12"></span>
+              <span class="anchor" id="variable-n~25"></span>
               integer,
             </td>
 <td>intent(in)</td>
@@ -1217,7 +1234,7 @@ and always includes the endpoints, the results being the same as
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-n~13"></span>
+              <span class="anchor" id="variable-n~26"></span>
               integer,
             </td>
 <td>intent(in)</td>
@@ -1290,7 +1307,7 @@ and always includes the endpoints, the results being the same as
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-n~14"></span>
+              <span class="anchor" id="variable-n~27"></span>
               integer,
             </td>
 <td>intent(in)</td>
@@ -1403,7 +1420,7 @@ and always includes the endpoints, the results being the same as
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-n~31"></span>
+              <span class="anchor" id="variable-n~44"></span>
               integer
             </td>
 <td></td>
@@ -1418,7 +1435,7 @@ and always includes the endpoints, the results being the same as
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-xr~13"></span>
+              <span class="anchor" id="variable-xr~16"></span>
               doubleprecision
             </td>
 <td></td>
@@ -1433,7 +1450,7 @@ and always includes the endpoints, the results being the same as
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-xi~13"></span>
+              <span class="anchor" id="variable-xi~16"></span>
               doubleprecision
             </td>
 <td></td>
@@ -1448,7 +1465,7 @@ and always includes the endpoints, the results being the same as
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-incx~13"></span>
+              <span class="anchor" id="variable-incx~14"></span>
               integer
             </td>
 <td></td>
@@ -1643,7 +1660,7 @@ and always includes the endpoints, the results being the same as
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-n~27"></span>
+              <span class="anchor" id="variable-n~40"></span>
               integer
             </td>
 <td></td>
@@ -1658,7 +1675,7 @@ and always includes the endpoints, the results being the same as
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-xr~9"></span>
+              <span class="anchor" id="variable-xr~12"></span>
               doubleprecision
             </td>
 <td></td>
@@ -1673,7 +1690,7 @@ and always includes the endpoints, the results being the same as
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-xi~9"></span>
+              <span class="anchor" id="variable-xi~12"></span>
               doubleprecision
             </td>
 <td></td>
@@ -1688,7 +1705,7 @@ and always includes the endpoints, the results being the same as
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-incx~9"></span>
+              <span class="anchor" id="variable-incx~10"></span>
               integer
             </td>
 <td></td>
@@ -1733,7 +1750,7 @@ and always includes the endpoints, the results being the same as
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-n~30"></span>
+              <span class="anchor" id="variable-n~43"></span>
               integer
             </td>
 <td></td>
@@ -1748,7 +1765,7 @@ and always includes the endpoints, the results being the same as
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-xr~12"></span>
+              <span class="anchor" id="variable-xr~15"></span>
               doubleprecision
             </td>
 <td></td>
@@ -1763,7 +1780,142 @@ and always includes the endpoints, the results being the same as
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-xi~12"></span>
+              <span class="anchor" id="variable-xi~15"></span>
+              doubleprecision
+            </td>
+<td></td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>xi</strong>(*)</td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-incx~13"></span>
+              integer
+            </td>
+<td></td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>incx</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-yr~9"></span>
+              doubleprecision
+            </td>
+<td></td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>yr</strong>(*)</td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-yi~9"></span>
+              doubleprecision
+            </td>
+<td></td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>yi</strong>(*)</td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-incy~11"></span>
+              integer
+            </td>
+<td></td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>incy</strong></td>
+            <td>
+
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>doubleprecision</small>
+    </h4>
+    
+
+    </div>
+  </div>
+
+              <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-mat_wdotcr"></span> <h3>public  function <a href='../proc/mat_wdotcr.html'>mat_wdotcr</a>(n, xr, xi, incx, yr, yi, incy)  
+</h3></div>
+    <div class="card-body">
+          
+  
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-n~42"></span>
+              integer
+            </td>
+<td></td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>n</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-xr~14"></span>
+              doubleprecision
+            </td>
+<td></td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>xr</strong>(*)</td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-xi~14"></span>
               doubleprecision
             </td>
 <td></td>
@@ -1849,7 +2001,7 @@ and always includes the endpoints, the results being the same as
   </div>
 
               <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-mat_wdotcr"></span> <h3>public  function <a href='../proc/mat_wdotcr.html'>mat_wdotcr</a>(n, xr, xi, incx, yr, yi, incy)  
+    <div class="card-header codesum"><span class="anchor" id="proc-mat_wdotui"></span> <h3>public  function <a href='../proc/mat_wdotui.html'>mat_wdotui</a>(n, xr, xi, incx, yr, yi, incy)  
 </h3></div>
     <div class="card-body">
           
@@ -1868,7 +2020,7 @@ and always includes the endpoints, the results being the same as
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-n~29"></span>
+              <span class="anchor" id="variable-n~41"></span>
               integer
             </td>
 <td></td>
@@ -1883,7 +2035,7 @@ and always includes the endpoints, the results being the same as
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-xr~11"></span>
+              <span class="anchor" id="variable-xr~13"></span>
               doubleprecision
             </td>
 <td></td>
@@ -1898,7 +2050,7 @@ and always includes the endpoints, the results being the same as
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-xi~11"></span>
+              <span class="anchor" id="variable-xi~13"></span>
               doubleprecision
             </td>
 <td></td>
@@ -1984,141 +2136,6 @@ and always includes the endpoints, the results being the same as
   </div>
 
               <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-mat_wdotui"></span> <h3>public  function <a href='../proc/mat_wdotui.html'>mat_wdotui</a>(n, xr, xi, incx, yr, yi, incy)  
-</h3></div>
-    <div class="card-body">
-          
-  
-
-  <h4>Arguments</h4>
-      <table class="table table-striped varlist">
-    <thead>
-      <tr>
-        <th scope="col">Type</th>
-<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
-        <th scope="col"></th>
-        <th scope="col">Name</th>
-        <th scope="col"></th>
-    </thead>
-    <tbody>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-n~28"></span>
-              integer
-            </td>
-<td></td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>n</strong></td>
-            <td>
-
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-xr~10"></span>
-              doubleprecision
-            </td>
-<td></td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>xr</strong>(*)</td>
-            <td>
-
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-xi~10"></span>
-              doubleprecision
-            </td>
-<td></td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>xi</strong>(*)</td>
-            <td>
-
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-incx~10"></span>
-              integer
-            </td>
-<td></td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>incx</strong></td>
-            <td>
-
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-yr~6"></span>
-              doubleprecision
-            </td>
-<td></td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>yr</strong>(*)</td>
-            <td>
-
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-yi~6"></span>
-              doubleprecision
-            </td>
-<td></td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>yi</strong>(*)</td>
-            <td>
-
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-incy~8"></span>
-              integer
-            </td>
-<td></td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>incy</strong></td>
-            <td>
-
-            </td>
-        </tr>
-    </tbody>
-  </table>
-
-    <h4>
-    Return Value
-    <small>doubleprecision</small>
-    </h4>
-    
-
-    </div>
-  </div>
-
-              <div class="card">
     <div class="card-header codesum"><span class="anchor" id="proc-mat_wdotur"></span> <h3>public  function <a href='../proc/mat_wdotur.html'>mat_wdotur</a>(n, xr, xi, incx, yr, yi, incy)  
 </h3></div>
     <div class="card-body">
@@ -2138,7 +2155,7 @@ and always includes the endpoints, the results being the same as
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-n~18"></span>
+              <span class="anchor" id="variable-n~31"></span>
               integer,
             </td>
 <td>intent(in)</td>
@@ -2153,7 +2170,7 @@ and always includes the endpoints, the results being the same as
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-xr"></span>
+              <span class="anchor" id="variable-xr~5"></span>
               doubleprecision
             </td>
 <td></td>
@@ -2168,7 +2185,7 @@ and always includes the endpoints, the results being the same as
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-xi"></span>
+              <span class="anchor" id="variable-xi~5"></span>
               doubleprecision
             </td>
 <td></td>
@@ -2183,7 +2200,7 @@ and always includes the endpoints, the results being the same as
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-incx"></span>
+              <span class="anchor" id="variable-incx~2"></span>
               integer
             </td>
 <td></td>
@@ -2198,7 +2215,7 @@ and always includes the endpoints, the results being the same as
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-yr"></span>
+              <span class="anchor" id="variable-yr~3"></span>
               doubleprecision
             </td>
 <td></td>
@@ -2213,7 +2230,7 @@ and always includes the endpoints, the results being the same as
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-yi"></span>
+              <span class="anchor" id="variable-yi~3"></span>
               doubleprecision
             </td>
 <td></td>
@@ -2228,7 +2245,7 @@ and always includes the endpoints, the results being the same as
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-incy"></span>
+              <span class="anchor" id="variable-incy~2"></span>
               integer
             </td>
 <td></td>
@@ -2273,7 +2290,7 @@ and always includes the endpoints, the results being the same as
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-n~26"></span>
+              <span class="anchor" id="variable-n~39"></span>
               integer
             </td>
 <td></td>
@@ -2288,7 +2305,7 @@ and always includes the endpoints, the results being the same as
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-xr~8"></span>
+              <span class="anchor" id="variable-xr~11"></span>
               doubleprecision
             </td>
 <td></td>
@@ -2303,7 +2320,7 @@ and always includes the endpoints, the results being the same as
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-xi~8"></span>
+              <span class="anchor" id="variable-xi~11"></span>
               doubleprecision
             </td>
 <td></td>
@@ -2318,7 +2335,7 @@ and always includes the endpoints, the results being the same as
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-incx~8"></span>
+              <span class="anchor" id="variable-incx~9"></span>
               integer
             </td>
 <td></td>
@@ -2383,7 +2400,7 @@ and always includes the endpoints, the results being the same as
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-lda"></span>
+              <span class="anchor" id="variable-lda~5"></span>
               integer,
             </td>
 <td>intent(in)</td>
@@ -2398,7 +2415,7 @@ and always includes the endpoints, the results being the same as
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-n~15"></span>
+              <span class="anchor" id="variable-n~28"></span>
               integer,
             </td>
 <td>intent(in)</td>
@@ -2468,7 +2485,7 @@ and always includes the endpoints, the results being the same as
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-n~16"></span>
+              <span class="anchor" id="variable-n~29"></span>
               integer,
             </td>
 <td>intent(in)</td>
@@ -2583,7 +2600,7 @@ and always includes the endpoints, the results being the same as
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-d"></span>
+              <span class="anchor" id="variable-d~3"></span>
               doubleprecision
             </td>
 <td></td>
@@ -2623,7 +2640,7 @@ and always includes the endpoints, the results being the same as
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-ar"></span>
+              <span class="anchor" id="variable-ar~8"></span>
               doubleprecision
             </td>
 <td></td>
@@ -2638,7 +2655,7 @@ and always includes the endpoints, the results being the same as
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-ai"></span>
+              <span class="anchor" id="variable-ai~8"></span>
               doubleprecision
             </td>
 <td></td>
@@ -2653,7 +2670,7 @@ and always includes the endpoints, the results being the same as
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-lda~2"></span>
+              <span class="anchor" id="variable-lda~6"></span>
               integer,
             </td>
 <td>intent(in)</td>
@@ -2668,7 +2685,7 @@ and always includes the endpoints, the results being the same as
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-m~9"></span>
+              <span class="anchor" id="variable-m~10"></span>
               integer
             </td>
 <td></td>
@@ -2683,7 +2700,7 @@ and always includes the endpoints, the results being the same as
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-n~17"></span>
+              <span class="anchor" id="variable-n~30"></span>
               integer
             </td>
 <td></td>
@@ -2738,7 +2755,7 @@ and always includes the endpoints, the results being the same as
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-n~24"></span>
+              <span class="anchor" id="variable-n~37"></span>
               integer
             </td>
 <td></td>
@@ -2768,7 +2785,7 @@ and always includes the endpoints, the results being the same as
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-incx~7"></span>
+              <span class="anchor" id="variable-incx~8"></span>
               integer
             </td>
 <td></td>
@@ -2798,7 +2815,7 @@ and always includes the endpoints, the results being the same as
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-incy~6"></span>
+              <span class="anchor" id="variable-incy~7"></span>
               integer
             </td>
 <td></td>
@@ -2953,7 +2970,7 @@ and always includes the endpoints, the results being the same as
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-n~25"></span>
+              <span class="anchor" id="variable-n~38"></span>
               integer
             </td>
 <td></td>
@@ -2998,7 +3015,7 @@ and always includes the endpoints, the results being the same as
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-incy~7"></span>
+              <span class="anchor" id="variable-incy~8"></span>
               integer
             </td>
 <td></td>
@@ -3038,7 +3055,7 @@ and always includes the endpoints, the results being the same as
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-n~21"></span>
+              <span class="anchor" id="variable-n~34"></span>
               integer
             </td>
 <td></td>
@@ -3068,7 +3085,7 @@ and always includes the endpoints, the results being the same as
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-incx~4"></span>
+              <span class="anchor" id="variable-incx~5"></span>
               integer
             </td>
 <td></td>
@@ -3098,7 +3115,7 @@ and always includes the endpoints, the results being the same as
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-incy~5"></span>
+              <span class="anchor" id="variable-incy~6"></span>
               integer
             </td>
 <td></td>
@@ -3138,7 +3155,7 @@ and always includes the endpoints, the results being the same as
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-xr~15"></span>
+              <span class="anchor" id="variable-xr~18"></span>
               doubleprecision
             </td>
 <td></td>
@@ -3153,7 +3170,7 @@ and always includes the endpoints, the results being the same as
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-xi~15"></span>
+              <span class="anchor" id="variable-xi~18"></span>
               doubleprecision
             </td>
 <td></td>
@@ -3168,7 +3185,7 @@ and always includes the endpoints, the results being the same as
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-yr~10"></span>
+              <span class="anchor" id="variable-yr~11"></span>
               doubleprecision
             </td>
 <td></td>
@@ -3183,7 +3200,7 @@ and always includes the endpoints, the results being the same as
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-yi~10"></span>
+              <span class="anchor" id="variable-yi~11"></span>
               doubleprecision
             </td>
 <td></td>
@@ -3238,7 +3255,7 @@ and always includes the endpoints, the results being the same as
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-xr~2"></span>
+              <span class="anchor" id="variable-xr~6"></span>
               doubleprecision,
             </td>
 <td>intent(in)</td>
@@ -3253,7 +3270,7 @@ and always includes the endpoints, the results being the same as
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-xi~2"></span>
+              <span class="anchor" id="variable-xi~6"></span>
               doubleprecision,
             </td>
 <td>intent(in)</td>
@@ -3268,7 +3285,7 @@ and always includes the endpoints, the results being the same as
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-incx~2"></span>
+              <span class="anchor" id="variable-incx~3"></span>
               integer,
             </td>
 <td>intent(in)</td>
@@ -3283,7 +3300,7 @@ and always includes the endpoints, the results being the same as
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-yr~2"></span>
+              <span class="anchor" id="variable-yr~4"></span>
               doubleprecision,
             </td>
 <td>intent(out)</td>
@@ -3298,7 +3315,7 @@ and always includes the endpoints, the results being the same as
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-yi~2"></span>
+              <span class="anchor" id="variable-yi~4"></span>
               doubleprecision,
             </td>
 <td>intent(out)</td>
@@ -3313,7 +3330,7 @@ and always includes the endpoints, the results being the same as
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-incy~2"></span>
+              <span class="anchor" id="variable-incy~3"></span>
               integer,
             </td>
 <td>intent(in)</td>
@@ -3353,7 +3370,7 @@ and always includes the endpoints, the results being the same as
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-ar~4"></span>
+              <span class="anchor" id="variable-ar~11"></span>
               doubleprecision
             </td>
 <td></td>
@@ -3368,7 +3385,7 @@ and always includes the endpoints, the results being the same as
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-ai~4"></span>
+              <span class="anchor" id="variable-ai~11"></span>
               doubleprecision
             </td>
 <td></td>
@@ -3383,7 +3400,7 @@ and always includes the endpoints, the results being the same as
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-br~2"></span>
+              <span class="anchor" id="variable-br~4"></span>
               doubleprecision
             </td>
 <td></td>
@@ -3398,7 +3415,7 @@ and always includes the endpoints, the results being the same as
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-bi~2"></span>
+              <span class="anchor" id="variable-bi~4"></span>
               doubleprecision
             </td>
 <td></td>
@@ -3468,7 +3485,7 @@ and always includes the endpoints, the results being the same as
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-in_real"></span>
+              <span class="anchor" id="variable-in_real~2"></span>
               doubleprecision
             </td>
 <td></td>
@@ -3483,7 +3500,7 @@ and always includes the endpoints, the results being the same as
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-in_imag"></span>
+              <span class="anchor" id="variable-in_imag~2"></span>
               doubleprecision
             </td>
 <td></td>
@@ -3498,7 +3515,7 @@ and always includes the endpoints, the results being the same as
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-out_real"></span>
+              <span class="anchor" id="variable-out_real~2"></span>
               doubleprecision
             </td>
 <td></td>
@@ -3513,7 +3530,7 @@ and always includes the endpoints, the results being the same as
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-out_imag"></span>
+              <span class="anchor" id="variable-out_imag~2"></span>
               doubleprecision
             </td>
 <td></td>
@@ -3553,7 +3570,7 @@ and always includes the endpoints, the results being the same as
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-ar~2"></span>
+              <span class="anchor" id="variable-ar~9"></span>
               doubleprecision,
             </td>
 <td>intent(in)</td>
@@ -3568,7 +3585,7 @@ and always includes the endpoints, the results being the same as
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-ai~2"></span>
+              <span class="anchor" id="variable-ai~9"></span>
               doubleprecision,
             </td>
 <td>intent(in)</td>
@@ -3583,7 +3600,7 @@ and always includes the endpoints, the results being the same as
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-br"></span>
+              <span class="anchor" id="variable-br~3"></span>
               doubleprecision,
             </td>
 <td>intent(in)</td>
@@ -3598,7 +3615,7 @@ and always includes the endpoints, the results being the same as
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-bi"></span>
+              <span class="anchor" id="variable-bi~3"></span>
               doubleprecision,
             </td>
 <td>intent(in)</td>
@@ -3668,8 +3685,8 @@ and always includes the endpoints, the results being the same as
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-ar~3"></span>
-              doubleprecision
+              <span class="anchor" id="variable-ar~10"></span>
+              double precision
             </td>
 <td></td>
               <td></td>            <td>
@@ -3683,8 +3700,8 @@ and always includes the endpoints, the results being the same as
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-ai~3"></span>
-              doubleprecision
+              <span class="anchor" id="variable-ai~10"></span>
+              double precision
             </td>
 <td></td>
               <td></td>            <td>
@@ -3698,7 +3715,7 @@ and always includes the endpoints, the results being the same as
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-lda~3"></span>
+              <span class="anchor" id="variable-lda~7"></span>
               integer
             </td>
 <td></td>
@@ -3713,7 +3730,7 @@ and always includes the endpoints, the results being the same as
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-n~32"></span>
+              <span class="anchor" id="variable-n~45"></span>
               integer
             </td>
 <td></td>
@@ -3728,7 +3745,7 @@ and always includes the endpoints, the results being the same as
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-info"></span>
+              <span class="anchor" id="variable-info~4"></span>
               integer
             </td>
 <td></td>
@@ -3737,6 +3754,121 @@ and always includes the endpoints, the results being the same as
             </td>
             <td>::</td>
             <td><strong>info</strong></td>
+            <td>
+
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+    </div>
+  </div>
+
+              <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-mat_wpow"></span> <h3>public  subroutine <a href='../proc/mat_wpow.html'>mat_wpow</a>(in_real, in_imag, out_real, out_imag, power_real, power_imag)  
+</h3></div>
+    <div class="card-body">
+          
+  
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-in_real"></span>
+              doubleprecision,
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>in_real</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-in_imag"></span>
+              doubleprecision,
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>in_imag</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-out_real"></span>
+              doubleprecision,
+            </td>
+<td>intent(out)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>out_real</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-out_imag"></span>
+              doubleprecision,
+            </td>
+<td>intent(out)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>out_imag</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-power_real"></span>
+              doubleprecision,
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>power_real</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-power_imag"></span>
+              doubleprecision,
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>power_imag</strong></td>
             <td>
 
             </td>
@@ -3768,7 +3900,7 @@ and always includes the endpoints, the results being the same as
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-n~22"></span>
+              <span class="anchor" id="variable-n~35"></span>
               integer
             </td>
 <td></td>
@@ -3798,7 +3930,7 @@ and always includes the endpoints, the results being the same as
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-xr~6"></span>
+              <span class="anchor" id="variable-xr~9"></span>
               doubleprecision
             </td>
 <td></td>
@@ -3813,7 +3945,7 @@ and always includes the endpoints, the results being the same as
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-xi~6"></span>
+              <span class="anchor" id="variable-xi~9"></span>
               doubleprecision
             </td>
 <td></td>
@@ -3828,7 +3960,7 @@ and always includes the endpoints, the results being the same as
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-incx~5"></span>
+              <span class="anchor" id="variable-incx~6"></span>
               integer
             </td>
 <td></td>
@@ -3868,7 +4000,7 @@ and always includes the endpoints, the results being the same as
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-n~23"></span>
+              <span class="anchor" id="variable-n~36"></span>
               integer,
             </td>
 <td>intent(in)</td>
@@ -3883,7 +4015,7 @@ and always includes the endpoints, the results being the same as
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-sr"></span>
+              <span class="anchor" id="variable-sr~3"></span>
               doubleprecision,
             </td>
 <td>intent(in)</td>
@@ -3898,7 +4030,7 @@ and always includes the endpoints, the results being the same as
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-si"></span>
+              <span class="anchor" id="variable-si~3"></span>
               doubleprecision,
             </td>
 <td>intent(in)</td>
@@ -3913,7 +4045,7 @@ and always includes the endpoints, the results being the same as
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-xr~7"></span>
+              <span class="anchor" id="variable-xr~10"></span>
               doubleprecision
             </td>
 <td></td>
@@ -3928,7 +4060,7 @@ and always includes the endpoints, the results being the same as
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-xi~7"></span>
+              <span class="anchor" id="variable-xi~10"></span>
               doubleprecision
             </td>
 <td></td>
@@ -3943,7 +4075,7 @@ and always includes the endpoints, the results being the same as
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-incx~6"></span>
+              <span class="anchor" id="variable-incx~7"></span>
               integer
             </td>
 <td></td>
@@ -3983,7 +4115,7 @@ and always includes the endpoints, the results being the same as
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-n~19"></span>
+              <span class="anchor" id="variable-n~32"></span>
               integer,
             </td>
 <td>intent(in)</td>
@@ -3998,7 +4130,7 @@ and always includes the endpoints, the results being the same as
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-xr~3"></span>
+              <span class="anchor" id="variable-xr~7"></span>
               doubleprecision,
             </td>
 <td>intent(in)</td>
@@ -4013,7 +4145,7 @@ and always includes the endpoints, the results being the same as
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-xi~3"></span>
+              <span class="anchor" id="variable-xi~7"></span>
               doubleprecision,
             </td>
 <td>intent(in)</td>
@@ -4028,7 +4160,7 @@ and always includes the endpoints, the results being the same as
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-yr~3"></span>
+              <span class="anchor" id="variable-yr~5"></span>
               doubleprecision
             </td>
 <td></td>
@@ -4043,7 +4175,7 @@ and always includes the endpoints, the results being the same as
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-yi~3"></span>
+              <span class="anchor" id="variable-yi~5"></span>
               doubleprecision
             </td>
 <td></td>
@@ -4058,7 +4190,7 @@ and always includes the endpoints, the results being the same as
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-incy~3"></span>
+              <span class="anchor" id="variable-incy~4"></span>
               integer
             </td>
 <td></td>
@@ -4098,7 +4230,7 @@ and always includes the endpoints, the results being the same as
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-xr~14"></span>
+              <span class="anchor" id="variable-xr~17"></span>
               doubleprecision
             </td>
 <td></td>
@@ -4113,7 +4245,7 @@ and always includes the endpoints, the results being the same as
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-xi~14"></span>
+              <span class="anchor" id="variable-xi~17"></span>
               doubleprecision
             </td>
 <td></td>
@@ -4128,7 +4260,7 @@ and always includes the endpoints, the results being the same as
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-yr~9"></span>
+              <span class="anchor" id="variable-yr~10"></span>
               doubleprecision
             </td>
 <td></td>
@@ -4143,7 +4275,7 @@ and always includes the endpoints, the results being the same as
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-yi~9"></span>
+              <span class="anchor" id="variable-yi~10"></span>
               doubleprecision
             </td>
 <td></td>
@@ -4158,7 +4290,7 @@ and always includes the endpoints, the results being the same as
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-zr"></span>
+              <span class="anchor" id="variable-zr~4"></span>
               doubleprecision
             </td>
 <td></td>
@@ -4173,7 +4305,7 @@ and always includes the endpoints, the results being the same as
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-zi"></span>
+              <span class="anchor" id="variable-zi~4"></span>
               doubleprecision
             </td>
 <td></td>
@@ -4194,7 +4326,7 @@ and always includes the endpoints, the results being the same as
   </div>
 
               <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-mat_wsqrt"></span> <h3>public  subroutine <a href='../proc/mat_wsqrt.html'>mat_wsqrt</a>(xr, xi, yr, yi)  
+    <div class="card-header codesum"><span class="anchor" id="proc-mat_wsqrt"></span> <h3>public  subroutine <a href='../proc/mat_wsqrt.html'>mat_wsqrt</a>(x_real, x_imag, y_real, y_imag)  
 </h3></div>
     <div class="card-body">
           
@@ -4213,7 +4345,7 @@ and always includes the endpoints, the results being the same as
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-xr~5"></span>
+              <span class="anchor" id="variable-x_real"></span>
               doubleprecision,
             </td>
 <td>intent(in)</td>
@@ -4221,14 +4353,14 @@ and always includes the endpoints, the results being the same as
               
             </td>
             <td>::</td>
-            <td><strong>xr</strong></td>
+            <td><strong>x_real</strong></td>
             <td>
 
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-xi~5"></span>
+              <span class="anchor" id="variable-x_imag"></span>
               doubleprecision,
             </td>
 <td>intent(in)</td>
@@ -4236,14 +4368,14 @@ and always includes the endpoints, the results being the same as
               
             </td>
             <td>::</td>
-            <td><strong>xi</strong></td>
+            <td><strong>x_imag</strong></td>
             <td>
 
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-yr~5"></span>
+              <span class="anchor" id="variable-y_real"></span>
               doubleprecision,
             </td>
 <td>intent(out)</td>
@@ -4251,14 +4383,14 @@ and always includes the endpoints, the results being the same as
               
             </td>
             <td>::</td>
-            <td><strong>yr</strong></td>
+            <td><strong>y_real</strong></td>
             <td>
 
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-yi~5"></span>
+              <span class="anchor" id="variable-y_imag"></span>
               doubleprecision,
             </td>
 <td>intent(out)</td>
@@ -4266,7 +4398,7 @@ and always includes the endpoints, the results being the same as
               
             </td>
             <td>::</td>
-            <td><strong>yi</strong></td>
+            <td><strong>y_imag</strong></td>
             <td>
 
             </td>
@@ -4298,7 +4430,7 @@ and always includes the endpoints, the results being the same as
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-n~20"></span>
+              <span class="anchor" id="variable-n~33"></span>
               integer
             </td>
 <td></td>
@@ -4313,7 +4445,7 @@ and always includes the endpoints, the results being the same as
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-xr~4"></span>
+              <span class="anchor" id="variable-xr~8"></span>
               doubleprecision
             </td>
 <td></td>
@@ -4328,7 +4460,7 @@ and always includes the endpoints, the results being the same as
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-xi~4"></span>
+              <span class="anchor" id="variable-xi~8"></span>
               doubleprecision
             </td>
 <td></td>
@@ -4343,7 +4475,7 @@ and always includes the endpoints, the results being the same as
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-incx~3"></span>
+              <span class="anchor" id="variable-incx~4"></span>
               integer
             </td>
 <td></td>
@@ -4358,7 +4490,7 @@ and always includes the endpoints, the results being the same as
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-yr~4"></span>
+              <span class="anchor" id="variable-yr~6"></span>
               doubleprecision
             </td>
 <td></td>
@@ -4373,7 +4505,7 @@ and always includes the endpoints, the results being the same as
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-yi~4"></span>
+              <span class="anchor" id="variable-yi~6"></span>
               doubleprecision
             </td>
 <td></td>
@@ -4388,7 +4520,7 @@ and always includes the endpoints, the results being the same as
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-incy~4"></span>
+              <span class="anchor" id="variable-incy~5"></span>
               integer
             </td>
 <td></td>
@@ -4421,40 +4553,21 @@ and always includes the endpoints, the results being the same as
     <footer>
       <div class="container">
         <div class="row justify-content-between">
-          <div class="col"><p>M_LA was developed by John S. Urban<br>&copy; 2024 
+          <div class="col">
+            <p>
+              M_LA
+ was developed by John S. Urban<br>              &copy; 2025 
 </p>
           </div>
           <div class="col">
             <p class="text-end">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2024-03-29 08:13              </p>
+ on 2025-03-31 12:28 +0000             </p>
           </div>
         </div>
         <br>
       </div> <!-- /container -->
     </footer>
-
-    <!-- Bootstrap core JavaScript -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>    
-
-    <!-- MathJax JavaScript
-             ================================================== -->
-             <!-- Placed at the end of the document so the pages load faster -->
-        <script type="text/x-mathjax-config">
-          MathJax.Hub.Config({
-          TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
-          jax: ['input/TeX','input/MathML','output/HTML-CSS'],
-          extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
-          });
-        </script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-
-          <script src="../tipuesearch/tipuesearch_content.js"></script>
-          <script src="../tipuesearch/tipuesearch_set.js"></script>
-          <script src="../tipuesearch/tipuesearch.js"></script>
-
   </body>
 </html>
